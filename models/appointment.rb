@@ -18,7 +18,7 @@
 
 require 'active_record'
 
-module Appointments
+module Models
 
   # Appointment class
   class Appointment < ActiveRecord::Base

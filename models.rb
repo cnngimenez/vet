@@ -17,7 +17,7 @@
 
 
 require 'active_record'
+require_relative 'models/appointment'
 
-module Models
- 
+module Models 
 end
