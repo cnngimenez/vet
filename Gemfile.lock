@@ -1,0 +1,41 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activemodel (6.1.0)
+      activesupport (= 6.1.0)
+    activerecord (6.1.0)
+      activemodel (= 6.1.0)
+      activesupport (= 6.1.0)
+    activesupport (6.1.0)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
+      zeitwerk (~> 2.3)
+    concurrent-ruby (1.1.7)
+    fxruby (1.6.43)
+      mini_portile2 (~> 2.1)
+    i18n (1.8.5)
+      concurrent-ruby (~> 1.0)
+    mini_portile2 (2.5.0)
+    minitest (5.14.2)
+    sqlite3 (1.4.2)
+    tzinfo (2.0.4)
+      concurrent-ruby (~> 1.0)
+    yard (0.9.25)
+    zeitwerk (2.4.2)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  activerecord (~> 6.1.0)
+  fxruby (~> 1.6.43)
+  sqlite3 (~> 1.4.2)
+  yard
+
+RUBY VERSION
+   ruby 2.7.2p137
+
+BUNDLED WITH
+   2.2.2
