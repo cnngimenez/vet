@@ -18,6 +18,9 @@
 require 'active_record'
 
 module DB
+
+  attr_reader :current_connection
+  
   class DBConnection
     def initialize
       @connection = nil
@@ -36,6 +39,4 @@ module DB
     end
     
   end 
-
-  @current_connection = DBConnection.new
 end

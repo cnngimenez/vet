@@ -19,9 +19,14 @@
 require 'fox16'
 require 'fox16/calendar'
 require_relative 'gui'
+require_relative 'db'
 
 include Fox
 include GUI
+
+db = DB::DBConnection.new
+db.connect
+db.migrate
 
 @app = FXApp.new 'Vet', 'Vet'
 
