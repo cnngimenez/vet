@@ -22,6 +22,19 @@ module Models
 
   # Appointment class
   class Appointment < ActiveRecord::Base
+    def to_s
+      if time_start?
+        tstart = Time.new time_start
+      else
+        tstart = "0"
+      end
+      if time_end?
+        tend = Time.new time_end
+      else
+        tend = "0"
+      end
+      return tstart.strftime("%R") + " - " + tend.strftime("%R") + ": " + title
+    end
   end # Appointment
 
   

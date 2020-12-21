@@ -20,6 +20,7 @@ require 'fox16'
 require 'fox16/calendar'
 require_relative 'gui'
 require_relative 'db'
+require_relative 'models'
 
 include Fox
 include GUI
@@ -31,6 +32,7 @@ db.migrate
 @app = FXApp.new 'Vet', 'Vet'
 
 @vw = WVetWindow.new @app
+@vw.appointment.lst = Models::Appointment.limit(10).to_a
 @vw.show
 
 @app.create

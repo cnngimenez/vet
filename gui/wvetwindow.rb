@@ -8,5 +8,9 @@ module GUI
       @cal = FXCalendar.new self
       @appointment = WAppointment.new self
     end
+
+    def appointment
+      return @appointment
+    end
   end
 end

@@ -45,6 +45,15 @@ module GUI
       @fxdesc.text = ""
       @wtime.reset
     end
+
+    def lst=(lst_appointments)
+      @lst = lst_appointments
+      update_widgets
+    end
+
+    def lst
+      return @lst
+    end
     
     def add_appointment(appointment)
       @lst.push appointment
@@ -58,6 +67,6 @@ module GUI
       @lst.each do |ap|
         @fxlist.appendItem ap.to_s
       end      
-    end
+    end   
   end # WAppointment
 end
