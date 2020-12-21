@@ -24,12 +24,12 @@ module Models
   class Appointment < ActiveRecord::Base
     def to_s
       if time_start?
-        tstart = Time.new time_start
+        tstart = Time.at time_start
       else
         tstart = "0"
       end
       if time_end?
-        tend = Time.new time_end
+        tend = Time.at time_end
       else
         tend = "0"
       end

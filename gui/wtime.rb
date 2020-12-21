@@ -80,7 +80,7 @@ module GUI
 
     def update_time      
       n = Time.now
-      @time = Time.new n.year, nil, nil, @fxhour.text.to_i, @fxmin.text.to_i, nil, nil
+      @time = Time.new n.year, n.month, n.day, @fxhour.text.to_i, @fxmin.text.to_i, nil, nil
     end
     
   end # WTime
