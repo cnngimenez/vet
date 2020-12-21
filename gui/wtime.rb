@@ -31,11 +31,11 @@ module GUI
       @fxhour = FXTextField.new self, 2, :opts => TEXTFIELD_INTEGER | TEXTFIELD_LIMITED
       @fxhour.connect SEL_VERIFY do |sender, sel, data|
         if data.to_i > 24
-          @fxstart.text = "1"
+          @fxhour.text = "1"
         elsif data.to_i <= 0
-          @fxstart.text = "1"
+          @fxhour.text = "1"
         else
-          @fxstart.text = data
+          @fxhour.text = data
         end
       end
       @fxhour.connect SEL_CHANGED do |sender, sel, data|
@@ -48,11 +48,11 @@ module GUI
       @fxmin = FXTextField.new self, 2, :opts => TEXTFIELD_INTEGER | TEXTFIELD_LIMITED
       @fxmin.connect SEL_VERIFY do |sender, sel, data|
         if data.to_i >= 60
-          @fxstart.text = "0"
+          @fxmin.text = "0"
         elsif data.to_i < 0
-          @fxstart.text = "0"
+          @fxmin.text = "0"
         else
-          @fxstart.text = data
+          @fxmin.text = data
         end
       end
       @fxmin.connect SEL_CHANGED do |sender, sel, data|
@@ -62,14 +62,25 @@ module GUI
       update_widgets
     end
 
+    def time=(time)
+      @time = time
+      update_widgets
+    end
+
+    def time
+      update_time      
+      return @time
+    end
+    
     private 
     def update_widgets
       @fxhour.text = @time.hour.to_s
       @fxmin.text = @time.min.to_s
     end
 
-    def update_time
-      @time = Time.new nil, nil, nil, @fxhour.text.to_i, @fxmin.text.to_i, nil, nil
+    def update_time      
+      n = Time.now
+      @time = Time.new n.year, nil, nil, @fxhour.text.to_i, @fxmin.text.to_i, nil, nil
     end
     
   end # WTime
