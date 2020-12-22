@@ -1,0 +1,26 @@
+* Licence
+This section describes the origin of the images and any available information like author and license. The PNG version is obtained by converting the SVG with [[https://imagemagick.org/][ImageMagic]] or [[https://inkscape.org/][Inkscape]].
+
+The sites used to obtain the images claims to publish their images under the Public Domain or Creative Commons license.
+
+** Obtained from https://openclipart.org/
+   Quoting the https://openclipart.org/faq page:
+
+   #+begin_quote
+   What is Open Clipart?
+
+   Founded in 2004, Open Clipart is an online media collection of more than 160 000 vectorial graphics, entirely in the public domain. You can read more on the Wikipedia page.
+   #+end_quote
+
+
+ - cat2.svg by Lenix25 https://openclipart.org/detail/324240/pet-little-cat
+ - dog1.svg by danilo89 https://openclipart.org/detail/313742/dog
+ 
+** Obtained from https://freesvg.org/
+   Quoting the https://freesvg.org/pages/about-us page:
+   #+begin_quote
+   Welcome to the new home and safe haven for all public domain clipart content in SVG vector format. We are Vedran and Boris, administrators of publicdomainvectors.org, a website dedicated to vector images in all graphic formats with public domain license.
+   #+end_quote
+
+ - cat1.svg Public Domain. https://freesvg.org/outline-vector-image-of-cat
+ - dog2.svg Public Domain. https://freesvg.org/happy-running-puppy-vector-image
