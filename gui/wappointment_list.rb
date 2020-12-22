@@ -35,6 +35,10 @@ module GUI
       @fxh1 = FXHorizontalFrame.new self,
                                     :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
       @cal = FXCalendar.new @fxh1
+      @cal.connect SEL_COMMAND do |sender, sel, data|
+        set_date data
+      end
+      
       @fxv1 = FXVerticalFrame.new @fxh1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
       @fxdate = FXLabel.new @fxv1, "Turnos para hoy"
       @fxlist = FXList.new @fxv1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
@@ -42,7 +46,8 @@ module GUI
       @wap = WAppointment.new self, "Nuevo Turno",
                               :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
       
-      @fxbtn = FXButton.new self, "Nuevo Turno", :opts => LAYOUT_CENTER_X
+      @fxbtn = FXButton.new self, "Nuevo Turno",
+                            :opts => LAYOUT_CENTER_X | BUTTON_NORMAL 
       @fxbtn.connect SEL_COMMAND do |sender, sel, data|
         ap = @wap.new_appointment
         ap.save
@@ -54,6 +59,12 @@ module GUI
       update_widgets
     end
 
+    def set_date(date)
+      @fxdate.text = "Turnos para " + date.strftime("%D")
+      @lst = Appointment.filter_by_date date
+      update_widgets
+    end
+    
     def reset_input
       @wap.reset
     end

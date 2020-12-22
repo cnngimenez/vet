@@ -35,6 +35,28 @@ module Models
       end
       return tstart.strftime("%R") + " - " + tend.strftime("%R") + ": " + title
     end
+
+    # @return [Time]
+    def t_time_start
+      Time.at time_start
+    end
+
+    # @return [Time]
+    def t_time_end
+      Time.at time_end
+    end
+    
+    class << self
+      # @param date [Time]
+      def filter_by_date(date)
+        startdate = Time.new date.year, date.month, date.day
+        enddate = Time.new date.year, date.month, date.day
+        enddate += 86400 # = 1 day
+       
+        where 'time_start > ? AND time_start < ?',
+              startdate.to_i, enddate.to_i
+      end
+    end
   end # Appointment
 
   
