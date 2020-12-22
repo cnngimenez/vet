@@ -20,7 +20,7 @@
 require 'fox16'
 include Fox
 
-require_relative 'wtimerange'
+require_relative 'wappointment'
 require_relative '../models'
 include Models
 
@@ -31,38 +31,26 @@ module GUI
       super(...)
 
       @lst = Array.new
-      
-      @cal = FXCalendar.new self      
-      @fxlist = FXList.new self, :opts => LAYOUT_FILL_X
-      
-      @fxtxt = FXTextField.new self, 50, :opts => LAYOUT_FILL_X
-      @fxtxt.text = "Título"
-      @fxtxt.helpText = "Título del turno"
-      @fxtxt.tipText= "Título del turno"
 
-      @wtime = WTimeRange.new self
+      @cal = FXCalendar.new self
+      @fxlist = FXList.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
 
-      @fxdesc = FXText.new self, :opts => LAYOUT_FILL_X
+      @wap = WAppointment.new self
       
-      @fxbtn = FXButton.new self, "Nuevo Turno", :opts => LAYOUT_FILL_X
+      @fxbtn = FXButton.new self, "Nuevo Turno", :opts => LAYOUT_CENTER_X
       @fxbtn.connect SEL_COMMAND do |sender, sel, data|
-        ap = Appointment.create title: @fxtxt.text,
-                                time_start: @wtime.time_start.to_i,
-                                time_end: @wtime.time_end.to_i,
-                                desc: @fxdesc.text
+        ap = @wap.new_appointment
         ap.save
         add_appointment ap
         
-        reset_input
+        reset_input 
       end
 
       update_widgets
     end
 
     def reset_input
-      @fxtxt.text = ""
-      @fxdesc.text = ""
-      @wtime.reset
+      @wap.reset
     end
 
     def lst=(lst_appointments)
