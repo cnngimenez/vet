@@ -32,10 +32,15 @@ module GUI
 
       @lst = Array.new
 
-      @cal = FXCalendar.new self
-      @fxlist = FXList.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
+      @fxh1 = FXHorizontalFrame.new self,
+                                    :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
+      @cal = FXCalendar.new @fxh1
+      @fxv1 = FXVerticalFrame.new @fxh1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
+      @fxdate = FXLabel.new @fxv1, "Turnos para hoy"
+      @fxlist = FXList.new @fxv1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
 
-      @wap = WAppointment.new self
+      @wap = WAppointment.new self, "Nuevo Turno",
+                              :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
       
       @fxbtn = FXButton.new self, "Nuevo Turno", :opts => LAYOUT_CENTER_X
       @fxbtn.connect SEL_COMMAND do |sender, sel, data|

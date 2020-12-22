@@ -29,11 +29,11 @@ module GUI
   ##
   # Widget to display and edit an Appointment instance
   #
-  class WAppointment < FXVerticalFrame
+  class WAppointment < FXGroupBox
     def initialize(...)
       super(...)
       
-      @fxtitle = FXTextField.new self, 50
+      @fxtitle = FXTextField.new self, 50, :opts => LAYOUT_FILL_X
       @fxtitle.text = "Título"
       @fxtitle.helpText = "Título del turno"
       @fxtitle.tipText= "Título del turno"
