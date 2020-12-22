@@ -18,7 +18,7 @@
 
 require_relative 'gui/wtime'
 require_relative 'gui/wtimerange'
-require_relative 'gui/wappointment'
+require_relative 'gui/wappointment_list'
 require_relative 'gui/wvetwindow'
 
 ##
