@@ -40,6 +40,21 @@ module GUI
       end
       
       @fxv1 = FXVerticalFrame.new @fxh1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
+
+      @f2 = FXHorizontalFrame.new @fxv1, :opts => LAYOUT_FILL_X
+      @btnyesterday = FXButton.new @f2, "Ayer"
+      @btnyesterday.connect SEL_COMMAND do |sender, sel, data|
+        set_date Time.now - 86400 # = 1 day
+      end
+      @btntoday = FXButton.new @f2, "Hoy"
+      @btntoday.connect SEL_COMMAND do |sender, sel, data|
+        set_date Time.now
+      end
+      @btntomorrow = FXButton.new @f2, "Mañana"
+      @btntomorrow.connect SEL_COMMAND do |sender, sel, data|
+        set_date Time.now + 86400 # = 1 day
+      end
+      
       @fxdate = FXLabel.new @fxv1, "Turnos para hoy"
       @fxlist = FXList.new @fxv1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
       @fxlist.connect SEL_DOUBLECLICKED do |sender, sel, data|
