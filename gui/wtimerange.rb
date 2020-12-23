@@ -43,6 +43,7 @@ module GUI
       return [@wstart.time, @wend.time]
     end
 
+    # @param arr [Array] An array with two Time instance.
     def range=(arr)
       @wstart.time = arr[0]
       @wend.time = arr[1]

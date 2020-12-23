@@ -41,24 +41,40 @@ module GUI
       
       @fxv1 = FXVerticalFrame.new @fxh1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
       @fxdate = FXLabel.new @fxv1, "Turnos para hoy"
-      @fxlist = FXList.new @fxv1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
+      @fxlist = FXList.new @fxv1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
+      @fxlist.connect SEL_DOUBLECLICKED do |sender, sel, data|
+        edit_appointment_num data
+      end
 
       @wap = WAppointment.new self, "Nuevo Turno",
-                              :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
+                              :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y | FRAME_NORMAL
       
       @fxbtn = FXButton.new self, "Nuevo Turno",
                             :opts => LAYOUT_CENTER_X | BUTTON_NORMAL 
       @fxbtn.connect SEL_COMMAND do |sender, sel, data|
-        ap = @wap.new_appointment
+        ap = @wap.appointment
         ap.save
-        add_appointment ap
         
-        reset_input 
+        add_appointment ap unless @lst.member? ap
+                
+        reset_input
+        update_widgets
       end
 
       update_widgets
     end
 
+    def edit_appointment_num(position)
+      edit_appointment @lst[position]
+    end
+
+    def edit_appointment(appointment)
+      return if appointment.nil?
+
+      @wap.edit appointment
+      @fxbtn.text = "Guardar Turno"
+    end
+    
     def set_date(date)
       @fxdate.text = "Turnos para " + date.strftime("%D")
       @lst = Appointment.filter_by_date date
@@ -67,6 +83,7 @@ module GUI
     
     def reset_input
       @wap.reset
+      @fxbtn.text = "Nuevo Turno"
     end
 
     def lst=(lst_appointments)

@@ -32,23 +32,47 @@ module GUI
   class WAppointment < FXGroupBox
     def initialize(...)
       super(...)
+
+      # The appointment instance to edit
+      @ap = nil
       
-      @fxtitle = FXTextField.new self, 50, :opts => LAYOUT_FILL_X
-      @fxtitle.text = "Título"
+      @lbltitle = FXLabel.new self, "Título"
+      @fxtitle = FXTextField.new self, 50, :opts => LAYOUT_FILL_X | TEXTFIELD_NORMAL
       @fxtitle.helpText = "Título del turno"
       @fxtitle.tipText= "Título del turno"
 
+      @lbltime = FXLabel.new self, "Hora"
       @wtime = WTimeRange.new self, :opts => LAYOUT_CENTER_X
 
+      @lbldesc = FXLabel.new self, "Descripción"
       @fxdesc = FXText.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
-      
+    end
+   
+    # Set the edit mode and use the widget to edit the given appointment.
+    #
+    # @param appointment [Models::Appointment] The instance to edit. If nil,
+    # then reset the data (same as #reset).
+    def edit(appointment)
+      @ap = appointment
+
+      update_widgets
     end
 
+    def ap
+      if @ap.nil?
+        return new_appointment
+      else
+        update_data
+        return @ap
+      end
+    end
+
+    alias appointment ap
+    
     # Reset the widget with blank information.
     def reset
-      @fxtitle.text = ""
-      @fxdesc.text = ""
-      @wtime.reset
+      @ap = nil
+      update_widgets
     end
 
     # Get a new appointment model.
@@ -61,6 +85,28 @@ module GUI
                          time_start: @wtime.time_start.to_i,
                          time_end: @wtime.time_end.to_i,
                          desc: @fxdesc.text
+    end
+    
+    private
+
+    def update_widgets
+      if @ap.nil?
+        @fxtitle.text = ""
+        @fxdesc.text = ""
+        @wtime.reset
+      else
+        @fxtitle.text = @ap.title
+        @fxdesc.text = @ap.desc
+        @wtime.range = [@ap.t_time_start, @ap.t_time_end ]
+      end
+    end
+
+    def update_data
+      return if @ap.nil?
+      @ap.title = @fxtitle.text
+      @ap.time_start=@wtime.time_start.to_i
+      @ap.time_end=@wtime.time_end.to_i
+      @ap.desc = @fxdesc.text
     end
     
   end # WAppointment

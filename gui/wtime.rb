@@ -27,8 +27,9 @@ module GUI
       @time = Time.now
 
 
-      
-      @fxhour = FXTextField.new self, 2, :opts => TEXTFIELD_INTEGER | TEXTFIELD_LIMITED
+      txtopts = TEXTFIELD_INTEGER | TEXTFIELD_LIMITED | TEXTFIELD_NORMAL
+      @fxhour = FXTextField.new self, 2, :opts => txtopts
+                                           
       @fxhour.connect SEL_VERIFY do |sender, sel, data|
         if data.to_i > 24
           @fxhour.text = "1"
@@ -45,7 +46,7 @@ module GUI
       
       @fxsep = FXLabel.new self, ' : '
       
-      @fxmin = FXTextField.new self, 2, :opts => TEXTFIELD_INTEGER | TEXTFIELD_LIMITED
+      @fxmin = FXTextField.new self, 2, :opts => txtopts
       @fxmin.connect SEL_VERIFY do |sender, sel, data|
         if data.to_i >= 60
           @fxmin.text = "0"
@@ -62,6 +63,7 @@ module GUI
       update_widgets
     end
 
+    
     def time=(time)
       @time = time
       update_widgets

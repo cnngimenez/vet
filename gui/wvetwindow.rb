@@ -28,7 +28,7 @@ module GUI
       @fxv1 = FXHorizontalFrame.new self, :opts => LAYOUT_FILL_X
 
       @img = FXPNGImage.new app, File.binread(get_random_image)
-      @imageview = FXImageFrame.new @fxv1, @img, :width => 100
+      @imageview = FXImageFrame.new @fxv1, @img, :width => 100, :opts => 0
       
       @appointment = WAppointment_List.new @fxv1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y      
     end
