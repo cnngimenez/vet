@@ -20,6 +20,7 @@ include Fox
 
 require_relative 'wappointment_list'
 require_relative 'inventory/wstock'
+require_relative 'inventory/wpurchase'
 require_relative '../models'
 include Models
 
@@ -30,6 +31,7 @@ module GUI
 
       @wstock = WStock.new app, "Stock"
       @wstock.stock = Product.all.to_a
+      @wpurchase = WPurchase.new app, "Compra de productos"
       
       @f1 = FXHorizontalFrame.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
       @f2 = FXVerticalFrame.new @f1, :opts => LAYOUT_FILL_X      
@@ -40,6 +42,10 @@ module GUI
       @btnstock = FXButton.new @f2, "Stock de productos", :opts => LAYOUT_FILL_X | BUTTON_NORMAL
       @btnstock.connect SEL_COMMAND do |sender, sel, data|
         @wstock.show
+      end
+      @btnstock = FXButton.new @f2, "Compra de productos", :opts => LAYOUT_FILL_X | BUTTON_NORMAL
+      @btnstock.connect SEL_COMMAND do |sender, sel, data|
+        @wpurchase.show
       end
       
       @appointment = WAppointment_List.new @f1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y      

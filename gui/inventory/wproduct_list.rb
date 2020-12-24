@@ -1,6 +1,6 @@
 # Copyright 2020 Christian Gimenez
 # 
-# wstock.rb
+# wproduct_list.rb
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,39 +21,41 @@ include Fox
 require_relative '../../models'
 include Models
 
-require_relative 'wproduct_list'
+require_relative 'wproduct'
 
 module GUI
-  class WStock < WProductList
+  class WProductList < FXMainWindow
     def initialize(...)
       super(...)
 
-      @wproduct = WProduct.new @fright, "Nuevo Producto", :opts => FRAME_NORMAL | LAYOUT_FILL_X
-      
-      @btnnew = FXButton.new @fright, "Nuevo producto", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
-      @btnnew.connect SEL_COMMAND do |sender, sel, data|
-        p = @wproduct.product
-        p.save
+      @stock = Array.new
 
-        add_product p unless @stock.member? p
+      @fmain = FXVerticalFrame.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
 
-        reset_input
-        update_widgets
-      end
-      
+      @ftop = FXHorizontalFrame.new @fmain, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
+      @flist = FXList.new @ftop, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
+      @fright = FXVerticalFrame.new @ftop, :opts => LAYOUT_FILL_X
+    end
+
+    def stock=(new_stock)
+      @stock = new_stock
       update_widgets
     end
 
-    def add_product(product)
-      @stock.push product
-      update_widgets
+    def stock
+      return stock
     end
-    
+
     protected
     
     def reset_input
-      @wproduct.reset
     end
     
+    def update_widgets
+      @flist.clearItems
+      @stock.each do |product|
+        @flist.appendItem product.to_s
+      end
+    end
   end
 end
