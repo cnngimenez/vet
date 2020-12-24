@@ -25,6 +25,10 @@ module Models
     
     validates :name, presence: true
     validates :stock, presence: true, numericality: {only_integer: true}
+
+    def to_s
+      "#{name} (#{code}) #{stock}"
+    end
   end # Product
 
   class Purchase < ActiveRecord::Base    
