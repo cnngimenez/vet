@@ -36,6 +36,28 @@ module Models
 
     validates :amount, presence: true, numericality: {only_integer: true}
     validates :product, presence: true
+    validates :unitary_cost, presence: true, numericality: true
+    validates :date, presence: true, numericality: true
+
+    def total
+      unitary_cost * amount
+    end
+    
+    def short_name
+      if product.nil?
+        " " * 10
+      else        
+        if product.name.length > 10
+          product.name[0..10]
+        else
+          product.name + " " * (10 - product.name.length)
+        end
+      end
+    end
+
+    def to_s
+      "#{short_name} $#{unitary_cost} x #{amount} = #{total}"
+    end
   end # Purchase
 
   class Sell < ActiveRecord::Base
@@ -43,6 +65,28 @@ module Models
 
     validates :amount, presence: true, numericality: {only_integer: true}
     validates :product, presence: true
+    validates :unitary_cost, presence: true, numericality: true
+    validates :date, presence: true, numericality: true
+
+    def total
+      unitary_cost * amount
+    end
+    
+    def short_name
+      if product.nil?
+        " " * 10
+      else        
+        if product.name.length > 10
+          product.name[0..10]
+        else
+          product.name + " " * (10 - product.name.length)
+        end
+      end
+    end
+    
+    def to_s
+      "#{short_name} $#{unitary_cost} x #{amount} = #{total}"
+    end
   end # Sell
   
 end # Models
