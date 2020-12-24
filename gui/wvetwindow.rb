@@ -20,6 +20,8 @@ include Fox
 
 require_relative 'wappointment_list'
 require_relative 'inventory/wstock'
+require_relative '../models'
+include Models
 
 module GUI
   class WVetWindow < FXMainWindow
@@ -27,6 +29,7 @@ module GUI
       super(app, "Vet", :opts => DECOR_ALL, :x => 100, :y => 100)
 
       @wstock = WStock.new app, "Stock"
+      @wstock.stock = Product.all.to_a
       
       @f1 = FXHorizontalFrame.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
       @f2 = FXVerticalFrame.new @f1, :opts => LAYOUT_FILL_X      
