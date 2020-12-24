@@ -19,18 +19,27 @@ require 'fox16'
 include Fox
 
 require_relative 'wappointment_list'
+require_relative 'inventory/wstock'
 
 module GUI
   class WVetWindow < FXMainWindow
     def initialize(app)
       super(app, "Vet", :opts => DECOR_ALL, :x => 100, :y => 100)
 
-      @fxv1 = FXHorizontalFrame.new self, :opts => LAYOUT_FILL_X
-
-      @img = FXPNGImage.new app, File.binread(get_random_image)
-      @imageview = FXImageFrame.new @fxv1, @img, :width => 100, :opts => 0
+      @wstock = WStock.new app, "Stock"
       
-      @appointment = WAppointment_List.new @fxv1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y      
+      @f1 = FXHorizontalFrame.new self, :opts => LAYOUT_FILL_X
+      @f2 = FXVerticalFrame.new @f1, :opts => LAYOUT_FILL_X      
+      
+      @img = FXPNGImage.new app, File.binread(get_random_image)
+      @imageview = FXImageFrame.new @f2, @img, :width => 100, :opts => 0
+     
+      @btnstock = FXButton.new @f2, "Stock de productos", :opts => LAYOUT_FILL_X | BUTTON_NORMAL
+      @btnstock.connect SEL_COMMAND do |sender, sel, data|
+        @wstock.show
+      end
+      
+      @appointment = WAppointment_List.new @f1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y      
     end
 
     def get_random_image
