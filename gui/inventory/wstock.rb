@@ -32,7 +32,19 @@ module GUI
 
       @f1 = FXVerticalFrame.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
 
-      @flist = FXList.new @f1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
+      @f2 = FXHorizontalFrame.new @f1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
+
+      @flist = FXList.new @f2, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
+      @flist.connect SEL_SELECTED do |sender, sel, data|
+          enable_purchase(data >= 0)
+      end
+
+      @f3 = FXVerticalFrame.new @f2, :opts => LAYOUT_FILL_X
+      @txtcant = FXTextField.new @f3, 4, :opts => LAYOUT_FILL_X | TEXTFIELD_NORMAL |
+                                                 TEXTFIELD_INTEGER
+      @txtdesc = FXText.new @f3, :opts => LAYOUT_FILL_X
+      @btnpurchase = FXButton.new @f3, "Compra"
+      @btnsell = FXButton.new @f3, "Venta"
 
       @wproduct = WProduct.new @f1, "Nuevo Producto",
                                :opts => LAYOUT_FILL_X | FRAME_NORMAL
@@ -67,8 +79,25 @@ module GUI
     
     private
 
+    def enable_purchase(enable=TRUE)
+      if enable
+        @txtdesc.enable
+        @txtcant.enable
+        @btnpurchase.enable
+        @btnsell.enable
+      else
+        @txtdesc.disable
+        @txtcant.disable
+        @btnpurchase.disable
+        @btnsell.disable
+      end
+    end
+    
     def reset_input
       @wproduct.reset
+      @txtdesc.text = ""
+      @txtcant.text = "0"
+      enable_purchase FALSE
     end
     
     def update_widgets
@@ -76,6 +105,8 @@ module GUI
       @stock.each do |product|
         @flist.appendItem product.to_s
       end
+
+      reset_input
     end
   end
 end
