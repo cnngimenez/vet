@@ -1,6 +1,6 @@
 # Copyright 2020 Christian Gimenez
 # 
-# models.rb
+# inventory.rb
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,12 +15,30 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 require 'active_record'
-require_relative 'models/appointment'
-require_relative 'models/inventory'
 
-##
-# The backend models.
-module Models 
-end
+module Models
+
+  class Product < ActiveRecord::Base
+    has_many :purchases
+    has_many :sells
+    
+    validates :name, presence: true
+    validates :stock, presence: true, numericality: {only_integer: true}
+  end # Product
+
+  class Purchase < ActiveRecord::Base    
+    belongs_to :product
+
+    validates :amount, presence: true, numericality: {only_integer: true}
+    validates :product, presence: true
+  end # Purchase
+
+  class Sell < ActiveRecord::Base
+    belongs_to :product
+
+    validates :amount, presence: true, numericality: {only_integer: true}
+    validates :product, presence: true
+  end # Sell
+  
+end # Models
