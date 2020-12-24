@@ -41,12 +41,28 @@ module GUI
       @txtdesc = FXText.new @fright, :opts => LAYOUT_FILL_X
       
       @btnpurchase = FXButton.new @fright, "Compra", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
-      
-      @lst_purchased = FXList.new @fmain, :opts => LAYOUT_FILL_X | LIST_NORMAL
+      @btnpurchase.connect SEL_COMMAND do |sender, sel, data|
+        purr = Purchase.create amount: @txtcant.text.to_i,
+                               unitary_cost: @txtprice.text.to_i,
+                               desc: @txtdesc.text,
+                               product: selected_product
+        add_purchase purr
 
+        reset_input
+      end
+
+      @lst_purchases = Array.new
+      @flst_purchased = FXList.new @fmain, :opts => LAYOUT_FILL_X | LIST_NORMAL
+
+      reset_input
       update_widgets
     end
 
+    def add_purchase(purr)
+      @lst_purchases.push purr
+      update_widgets
+    end
+    
     protected
     
     def enable_purchase(enable=TRUE)
@@ -73,7 +89,11 @@ module GUI
 
     def update_widgets
       super
-      reset_input
+      
+      @flst_purchased.clearItems
+      @lst_purchases.each do |purr|
+        @flst_purchased.appendItem purr.to_s
+      end
     end
     
   end # WPurchase

@@ -46,6 +46,12 @@ module GUI
       return stock
     end
 
+    def selected_product
+      return nil if @flist.currentItem.nil?
+
+      @stock[@flist.currentItem]
+    end
+
     protected
     
     def reset_input
