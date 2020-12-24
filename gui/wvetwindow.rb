@@ -28,7 +28,7 @@ module GUI
 
       @wstock = WStock.new app, "Stock"
       
-      @f1 = FXHorizontalFrame.new self, :opts => LAYOUT_FILL_X
+      @f1 = FXHorizontalFrame.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
       @f2 = FXVerticalFrame.new @f1, :opts => LAYOUT_FILL_X      
       
       @img = FXPNGImage.new app, File.binread(get_random_image)

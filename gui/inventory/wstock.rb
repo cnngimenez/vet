@@ -21,6 +21,8 @@ include Fox
 require_relative '../../models'
 include Models
 
+require_relative 'wproduct'
+
 module GUI
   class WStock < FXMainWindow
     def initialize(...)
@@ -28,9 +30,24 @@ module GUI
 
       @stock = Array.new
 
-      @f1 = FXHorizontalFrame.new self, :opts => LAYOUT_FILL_X
+      @f1 = FXVerticalFrame.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
+
       @flist = FXList.new @f1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
 
+      @wproduct = WProduct.new @f1, "Nuevo Producto",
+                               :opts => LAYOUT_FILL_X | FRAME_NORMAL
+      
+      @btnnew = FXButton.new @f1, "Nuevo producto"
+      @btnnew.connect SEL_COMMAND do |sender, sel, data|
+        p = @wproduct.product
+        p.save
+
+        add_product p unless @stock.member? p
+
+        reset_input
+        update_widgets
+      end
+      
       update_widgets
     end
 
@@ -42,9 +59,18 @@ module GUI
     def stock
       return stock
     end
+
+    def add_product(product)
+      @stock.push product
+      update_widgets
+    end
     
     private
 
+    def reset_input
+      @wproduct.reset
+    end
+    
     def update_widgets
       @flist.clearItems
       @stock.each do |product|
