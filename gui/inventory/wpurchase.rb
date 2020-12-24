@@ -43,7 +43,7 @@ module GUI
       @btnpurchase = FXButton.new @fright, "Compra", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
       @btnpurchase.connect SEL_COMMAND do |sender, sel, data|
         purr = Purchase.create amount: @txtcant.text.to_i,
-                               unitary_cost: @txtprice.text.to_i,
+                               unitary_cost: @txtprice.text.to_f,
                                desc: @txtdesc.text,
                                product: selected_product
         add_purchase purr
@@ -53,6 +53,14 @@ module GUI
 
       @lst_purchases = Array.new
       @flst_purchased = FXList.new @fmain, :opts => LAYOUT_FILL_X | LIST_NORMAL
+      @lbltotal = FXLabel.new @fmain, "Total: "
+
+      @flist.connect SEL_SELECTED do |sender, sel, data|
+        enable_purchase
+      end
+      @flist.connect SEL_DESELECTED do |sender, sel, data|
+        enable_purchase FALSE
+      end
 
       reset_input
       update_widgets
@@ -66,17 +74,16 @@ module GUI
     protected
     
     def enable_purchase(enable=TRUE)
-      super enable
       if enable
         @txtdesc.enable
+        @txtprice.enable
         @txtcant.enable
         @btnpurchase.enable
-        @btnsell.enable
       else
         @txtdesc.disable
         @txtcant.disable
+        @txtprice.disable
         @btnpurchase.disable
-        @btnsell.disable
       end
     end
 
@@ -85,15 +92,19 @@ module GUI
       @txtdesc.text = ""
       @txtcant.text = "1"
       @txtprice.text = "1.0"
+      enable_purchase FALSE
     end
 
     def update_widgets
       super
       
       @flst_purchased.clearItems
+      total = 0
       @lst_purchases.each do |purr|
         @flst_purchased.appendItem purr.to_s
+        total += purr.total
       end
+      @lbltotal.text = "Total: #{total}"
     end
     
   end # WPurchase

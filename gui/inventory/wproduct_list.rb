@@ -55,6 +55,7 @@ module GUI
     protected
     
     def reset_input
+      @flist.killSelection
     end
     
     def update_widgets
