@@ -28,7 +28,7 @@ module GUI
   class WVetWindow < FXMainWindow
     def initialize(app)
       super(app, "Vet", :opts => DECOR_ALL, :x => 100, :y => 100)
-
+      
       @wstock = WStock.new app, "Stock"
       @wstock.stock = Product.all.to_a
       @wpurchase = WPurchase.new app, "Compra de productos"
@@ -48,7 +48,11 @@ module GUI
         @wpurchase.show
       end
       
-      @appointment = WAppointment_List.new @f1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y      
+      @appointment = WAppointment_List.new @f1, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
+
+      self.connect SEL_CLOSE do |sender, sel, data|
+        app.exit
+      end
     end
 
     def get_random_image

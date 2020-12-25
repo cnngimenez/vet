@@ -34,7 +34,12 @@ module GUI
 
       @ftop = FXHorizontalFrame.new @fmain, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
       @flist = FXList.new @ftop, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
-      @fright = FXVerticalFrame.new @ftop, :opts => LAYOUT_FILL_X
+      @fright = FXVerticalFrame.new @ftop
+
+      self.connect SEL_CLOSE do |sender, sel,data|
+        self.visible=FALSE
+        1 # This avoids deleting itself when closing
+      end
     end
 
     def stock=(new_stock)
