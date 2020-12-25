@@ -54,7 +54,11 @@ module GUI
       @lst_purchases = Array.new
       @flst_purchased = FXList.new @fmain, :opts => LAYOUT_FILL_X | LIST_NORMAL
       @lbltotal = FXLabel.new @fmain, "Total: "
-
+      @btnsave = FXButton.new @fmain, "Guardar"
+      @btnsave.connect SEL_SELECTED do |sender, sel, data|
+        confirm_save
+      end
+      
       @flist.connect SEL_SELECTED do |sender, sel, data|
         enable_purchase
       end
@@ -69,6 +73,14 @@ module GUI
     def add_purchase(purr)
       @lst_purchases.push purr
       update_widgets
+    end
+
+    def confirm_save
+      @lst_purchases.each do |purr|
+        purr.save
+        purr.product.stock += purr.amount
+        purr.product.save
+      end
     end
     
     protected
