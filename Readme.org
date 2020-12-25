@@ -1,0 +1,13 @@
+A Vet appointment and Pet Shop inventory management.
+
+* Requirements
+Use [[https://bundler.io/][bundler]] to install all the needed Ruby gems:
+
+: bundler install
+
+In unix, the [[http://www.fox-toolkit.org/][Fox toolkit]] libraries are required. 
+
+* License
+[[https://www.gnu.org/graphics/gplv3-with-text-136x68.png]]
+
+This work is under the GNU General Public License version 3. See https://www.gnu.org/licenses/gpl-3.0.html for more information.
