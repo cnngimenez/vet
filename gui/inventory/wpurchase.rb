@@ -59,10 +59,10 @@ module GUI
         confirm_save
       end
       
-      @flist.connect SEL_SELECTED do |sender, sel, data|
+      @wpf.on :on_select do |sender, sel, data|
         enable_purchase
       end
-      @flist.connect SEL_DESELECTED do |sender, sel, data|
+      @wpf.on :on_deselect do |sender, sel, data|
         enable_purchase FALSE
       end
 
@@ -79,8 +79,9 @@ module GUI
       @lst_purchases.each do |purr|
         purr.save
         purr.product.stock += purr.amount
-        purr.product.save
+        purr.product.save        
       end
+      hide
     end
     
     protected

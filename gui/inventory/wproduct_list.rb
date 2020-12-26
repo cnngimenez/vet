@@ -22,18 +22,17 @@ require_relative '../../models'
 include Models
 
 require_relative 'wproduct'
+require_relative 'wproduct_filter'
 
 module GUI
   class WProductList < FXMainWindow
     def initialize(...)
       super(...)
 
-      @stock = Array.new
-
       @fmain = FXVerticalFrame.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
 
       @ftop = FXHorizontalFrame.new @fmain, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
-      @flist = FXList.new @ftop, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
+      @wpf = WProductFilter.new @ftop, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
       @fright = FXVerticalFrame.new @ftop
 
       self.connect SEL_CLOSE do |sender, sel,data|
@@ -42,32 +41,31 @@ module GUI
       end
     end
 
+    def update_stock
+      @wpf.update_stock
+    end
+    
     def stock=(new_stock)
-      @stock = new_stock
+      @wpf.stock = new_stock
       update_widgets
     end
 
     def stock
-      return stock
+      return @wpf.stock
     end
 
     def selected_product
-      return nil if @flist.currentItem.nil?
-
-      @stock[@flist.currentItem]
+      return @wpf.selected_product
     end
 
     protected
     
     def reset_input
-      @flist.killSelection
+      @wpf.reset_input
     end
     
     def update_widgets
-      @flist.clearItems
-      @stock.each do |product|
-        @flist.appendItem product.to_s
-      end
+      @wpf.update_widgets
     end
   end
 end

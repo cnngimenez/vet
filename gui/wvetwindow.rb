@@ -29,7 +29,7 @@ module GUI
     def initialize(app)
       super(app, "Vet", :opts => DECOR_ALL, :x => 100, :y => 100)
       
-      @wstock = WStock.new app, "Stock"
+      @wstock = WStock.new app, "Stock", :width => 500, :opts => DECOR_ALL
       @wstock.stock = Product.all.to_a
       @wpurchase = WPurchase.new app, "Compra de productos"
       
