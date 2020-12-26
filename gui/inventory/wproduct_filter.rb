@@ -27,14 +27,19 @@ module GUI
       super(...)
 
       @stock = Product.all.to_a
+      @filtered = Array.new
+      
       @actions = {
         on_select: nil,
         on_deselect: nil
       }
       
-      # @ftxtfilter = FXTextField.new self, :opts => TEXTFIELD_NORMAL | LAYOUT_FILL_X
+      @ftxtfilter = FXTextField.new self, 50, :opts => TEXTFIELD_NORMAL | LAYOUT_FILL_X
       @flist = FXList.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
 
+      @ftxtfilter.connect SEL_CHANGED do |sender, sel, data|
+        filter data
+      end
       @flist.connect SEL_SELECTED do |sender, sel, data|
         on_select sender, sel, data
       end
@@ -42,6 +47,13 @@ module GUI
         on_deselect sender, sel, data
       end
 
+      filter "" # This updates widgets while emptying the filter.
+    end
+    
+    def filter(data)
+      @filtered = @stock.select do |product|
+        product.name.include? data
+      end
       update_widgets
     end
 
@@ -87,7 +99,7 @@ module GUI
     
     def update_widgets
       @flist.clearItems
-      @stock.each do |product|
+      @filtered.each do |product|
         @flist.appendItem product.to_s
       end
     end
