@@ -54,7 +54,7 @@ module GUI
       @lst_purchases = Array.new
       @flst_purchased = FXList.new @fmain, :opts => LAYOUT_FILL_X | LIST_NORMAL
       @lbltotal = FXLabel.new @fmain, "Total: "
-      @btnsave = FXButton.new @fmain, "Guardar"
+      @btnsave = FXButton.new @fmain, "Guardar", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
       @btnsave.connect SEL_SELECTED do |sender, sel, data|
         confirm_save
       end

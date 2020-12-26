@@ -102,6 +102,10 @@ module GUI
       @filtered.each do |product|
         @flist.appendItem product.to_s
       end
+
+      if @filtered.count == 1
+        @flist.selectItem 0, true
+      end
     end
     
   end # WProductFiletr
