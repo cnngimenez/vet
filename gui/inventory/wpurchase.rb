@@ -22,104 +22,19 @@ include Fox
 require_relative '../../models'
 include Models
 
-require_relative 'wproduct_list'
+require_relative 'wbill'
 
 module GUI
-  class WPurchase < WProductList
+  class WPurchase < WBill
     def initialize(...)
       super(...)
 
-      @stock = Product.all.to_a
-
-      @lblcant = FXLabel.new @fright, "Cantidad:"
-      @txtcant = FXTextField.new @fright, 4, :opts => LAYOUT_FILL_X | TEXTFIELD_NORMAL |
-                                                     TEXTFIELD_INTEGER
-      @lblprice = FXLabel.new @fright, "Precio unitario:"
-      @txtprice = FXTextField.new @fright, 4, :opts => LAYOUT_FILL_X | TEXTFIELD_NORMAL |
-                                                      TEXTFIELD_REAL
-      @lblcant = FXLabel.new @fright, "Descripción:"
-      @txtdesc = FXText.new @fright, :opts => LAYOUT_FILL_X
-      
-      @btnpurchase = FXButton.new @fright, "Compra", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
-      @btnpurchase.connect SEL_COMMAND do |sender, sel, data|
-        purr = Purchase.create amount: @txtcant.text.to_i,
-                               unitary_cost: @txtprice.text.to_f,
-                               desc: @txtdesc.text,
-                               product: selected_product
-        purr.t_date Time.now
-        add_purchase purr
-
-        reset_input
-      end
-
-      @lst_purchases = Array.new
-      @flst_purchased = FXList.new @fmain, :opts => LAYOUT_FILL_X | LIST_NORMAL
-      @lbltotal = FXLabel.new @fmain, "Total: "
-      @btnsave = FXButton.new @fmain, "Guardar", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
-      @btnsave.connect SEL_SELECTED do |sender, sel, data|
-        confirm_save
-      end
-      
-      @wpf.on :on_select do |sender, sel, data|
-        enable_purchase
-      end
-      @wpf.on :on_deselect do |sender, sel, data|
-        enable_purchase FALSE
-      end
-
-      reset_input
-      update_widgets
     end
 
-    def add_purchase(purr)
-      @lst_purchases.push purr
-      update_widgets
-    end
-
-    def confirm_save
-      @lst_purchases.each do |purr|
-        purr.save
-        purr.product.stock += purr.amount
-        purr.product.save        
-      end
-      hide
-    end
-    
     protected
     
-    def enable_purchase(enable=TRUE)
-      if enable
-        @txtdesc.enable
-        @txtprice.enable
-        @txtcant.enable
-        @btnpurchase.enable
-      else
-        @txtdesc.disable
-        @txtcant.disable
-        @txtprice.disable
-        @btnpurchase.disable
-      end
+    def create_obj(data)
+      Purchase.create data
     end
-
-    def reset_input
-      super
-      @txtdesc.text = ""
-      @txtcant.text = "1"
-      @txtprice.text = "1.0"
-      enable_purchase FALSE
-    end
-
-    def update_widgets
-      super
-      
-      @flst_purchased.clearItems
-      total = 0
-      @lst_purchases.each do |purr|
-        @flst_purchased.appendItem purr.to_s
-        total += purr.total
-      end
-      @lbltotal.text = "Total: #{total}"
-    end
-    
   end # WPurchase
 end # GUI
