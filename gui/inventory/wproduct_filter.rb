@@ -75,11 +75,13 @@ module GUI
 
     def update_stock
       @stock = Product.all.to_a
+      filter ""
       update_widgets
     end
 
     def stock=(lst)
       @stock = lst
+      filter ""
       update_widgets
     end
         

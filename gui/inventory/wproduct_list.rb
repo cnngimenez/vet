@@ -58,6 +58,11 @@ module GUI
       return @wpf.selected_product
     end
 
+    def show
+      super
+      update_widgets
+    end
+    
     protected
     
     def reset_input
@@ -65,6 +70,7 @@ module GUI
     end
     
     def update_widgets
+      @wpf.update_stock
       @wpf.update_widgets
     end
   end

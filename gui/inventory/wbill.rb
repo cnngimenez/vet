@@ -58,9 +58,16 @@ module GUI
       @lst_objs = Array.new
       @flst_items = FXList.new @fmain, :opts => LAYOUT_FILL_X | LIST_NORMAL
       @lbltotal = FXLabel.new @fmain, "Total: "
-      @btnsave = FXButton.new @fmain, "Guardar", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
-      @btnsave.connect SEL_SELECTED do |sender, sel, data|
+
+      @fbtns = FXHorizontalFrame.new @fmain, :opts => LAYOUT_FILL_X
+      @btnsave = FXButton.new @fbtns, "Guardar", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
+      @btncancel = FXButton.new @fbtns, "Cancelar", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
+      
+      @btnsave.connect SEL_COMMAND do |sender, sel, data|
         confirm_save
+      end
+      @btncancel.connect SEL_COMMAND do |sender, sel, data|
+        cancel
       end
       
       @wpf.on :on_select do |sender, sel, data|
@@ -83,9 +90,17 @@ module GUI
       @lst_objs.each do |purr|
         purr.save
         purr.product.stock += purr.amount
-        purr.product.save        
+        purr.product.save
       end
-      hide
+      reset_input      
+      @lst_objs = Array.new
+      close TRUE
+    end
+
+    def cancel
+      reset_input
+      @lst_objs = Array.new
+      close TRUE
     end
     
     protected
