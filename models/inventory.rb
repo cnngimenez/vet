@@ -39,8 +39,25 @@ module Models
     validates :unitary_cost, presence: true, numericality: true
     validates :date, presence: true, numericality: true
 
+    # Total cost of this purchase
+    #
+    # @return [Float]
     def total
       unitary_cost * amount
+    end
+
+    # Set the #date attribute with a Time instance.
+    #
+    # @param time_obj [Time]
+    def t_date=(time_obj)
+      date = time_obj.to_i
+    end
+
+    # Return the #date attribute with a Time instance.
+    #
+    # @return [Time]
+    def t_date
+      Time.at date
     end
     
     def short_name

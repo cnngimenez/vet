@@ -46,6 +46,7 @@ module GUI
                                unitary_cost: @txtprice.text.to_f,
                                desc: @txtdesc.text,
                                product: selected_product
+        purr.t_date Time.now
         add_purchase purr
 
         reset_input
