@@ -44,7 +44,7 @@ module GUI
       @lblcant = FXLabel.new @fright, "Descripción:"
       @txtdesc = FXText.new @fright, :opts => LAYOUT_FILL_X
       
-      @btnaction = FXButton.new @fright, "Compra", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
+      @btnaction = FXButton.new @fright, "Acción", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
       @btnaction.connect SEL_COMMAND do |sender, sel, data|
         purr = create_obj  amount: @txtcant.text.to_i,
                            unitary_cost: @txtprice.text.to_f,

@@ -1,7 +1,6 @@
-# coding: utf-8
 # Copyright 2020 Christian Gimenez
 # 
-# wpurchase.rb
+# wsell.rb
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,17 +24,18 @@ include Models
 require_relative 'wbill'
 
 module GUI
-  class WPurchase < WBill
+  class WSell < WBill
     def initialize(...)
       super(...)
 
-      @btnaction.text = "Comprar"
+      @btnaction.text = "Vender"
     end
 
     protected
-    
+
     def create_obj(data)
-      Purchase.create data
+      Sell.create data
     end
-  end # WPurchase
-end # GUI
+    
+  end # WSell
+end #GUI
