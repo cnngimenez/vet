@@ -85,6 +85,7 @@ module GUI
     # @param product [Models.Product]
     def add_product(product)
       @stock.push product
+      filter ''
     end
 
     def selected_product

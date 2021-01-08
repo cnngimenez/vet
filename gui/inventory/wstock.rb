@@ -1,5 +1,5 @@
 # Copyright 2020 Christian Gimenez
-# 
+#
 # wstock.rb
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,22 +16,42 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require 'fox16'
-include Fox
-
 require_relative '../../models'
-include Models
-
 require_relative 'wproduct_list'
 
+# User interface module
 module GUI
+  include Fox
+  include Models
+
+  # The Stock Window
+  #
+  # Display and manage the stocked products.
   class WStock < WProductList
     def initialize(...)
       super(...)
 
-      @wproduct = WProduct.new @fright, "Nuevo Producto", :opts => FRAME_NORMAL | LAYOUT_FILL_X
-      
-      @btnnew = FXButton.new @fright, "Nuevo producto", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
-      @btnnew.connect SEL_COMMAND do |sender, sel, data|
+      @wproduct = WProduct.new @fright, 'Nuevo Producto', opts: FRAME_NORMAL | LAYOUT_FILL_X
+      @btnnew = FXButton.new @fright, 'Nuevo producto', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
+
+      update_widgets
+    end
+
+    def add_product(product)
+      @wpf.add product
+      update_widgets
+    end
+
+    protected
+
+    def reset_input
+      @wproduct.reset
+    end
+
+    private
+
+    def assign_handlers
+      @btnnew.connect SEL_COMMAND do |_sender, _sel, _data|
         p = @wproduct.product
         p.save
 
@@ -40,20 +60,6 @@ module GUI
         reset_input
         update_widgets
       end
-      
-      update_widgets
     end
-
-    def add_product(product)
-      @wpf.add product
-      update_widgets
-    end
-    
-    protected
-    
-    def reset_input
-      @wproduct.reset
-    end
-    
   end
 end
