@@ -28,7 +28,7 @@ module GUI
   # Appointment widget
   class WAppointment_List < FXMDIChild
     def initialize(mdiclient)
-      super mdiclient, 'Turnos', nil, nil, 0, 0, 0, 500, 500
+      super mdiclient, 'Turnos', nil, nil, 0, 10, 10, 350, 700
 
       @lst = []
       
