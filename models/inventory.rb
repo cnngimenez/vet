@@ -1,3 +1,4 @@
+# coding: utf-8
 # Copyright 2020 Christian Gimenez
 #
 # inventory.rb
@@ -92,7 +93,8 @@ module Models
     end
 
     def to_s
-      "#{short_name} $#{unitary_cost} x #{amount} = #{total}"
+      s_date = t_date.to_formatted_s :short
+      "#{short_name} $#{unitary_cost} x #{amount} = #{total}  #{s_date}"
     end
   end
 
@@ -112,6 +114,20 @@ module Models
       unitary_cost * amount
     end
 
+    # Set the #date attribute with a Time instance.
+    #
+    # @param time_obj [Time]
+    def t_date=(time_obj)
+      self.date = time_obj.to_i
+    end
+
+    # Return the #date attribute with a Time instance.
+    #
+    # @return [Time]
+    def t_date
+      Time.at date
+    end
+
     def short_name
       return ' ' * 10 if product.nil?
 
@@ -124,7 +140,8 @@ module Models
     end
 
     def to_s
-      "#{short_name} $#{unitary_cost} x #{amount} = #{total}"
+      s_date = t_date.to_formatted_s :short
+      "#{short_name} $#{unitary_cost} x #{amount} = #{total}  #{s_date}"
     end
   end
 end

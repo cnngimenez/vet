@@ -1,3 +1,4 @@
+# coding: utf-8
 # Copyright 2020 Christian Gimenez
 #
 # wstock.rb
@@ -35,6 +36,10 @@ module GUI
 
       @wproduct = WProduct.new @fright, 'Nuevo Producto', opts: FRAME_NORMAL | LAYOUT_FILL_X
       @btnnew = FXButton.new @fright, 'Nuevo producto', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
+      @lblpurchased = FXLabel.new @fright, 'Últimas 10 compras a vendedor:'
+      @lstpurchased = FXList.new @fright, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
+      @lblsold = FXLabel.new @fright, 'Últimas 10 ventas a clientes:'
+      @lstsold = FXList.new @fright, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
 
       assign_handlers
       update_widgets
@@ -49,6 +54,22 @@ module GUI
     end
 
     protected
+
+    def update_widgets
+      super
+      return unless @wproduct.editing?
+
+      product = @wproduct.product
+
+      @lstpurchased.clearItems
+      product.purchases.limit(10).order('date desc').each do |purr|
+        @lstpurchased.appendItem purr.to_s
+      end
+      @lstsold.clearItems
+      product.sells.limit(10).order('date desc').each do |sell|
+        @lstsold.appendItem sell.to_s
+      end
+    end
 
     def reset_input
       @wproduct.reset
@@ -69,6 +90,7 @@ module GUI
 
     def wpf_double_clicked(product)
       @wproduct.edit product
+      update_widgets
     end
   end
 end
