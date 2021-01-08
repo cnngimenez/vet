@@ -26,19 +26,32 @@ module GUI
 
   class WMain < FXMainWindow
     def initialize(app)
-      super app, 'Vet', opts: DECOR_ALL,
-            x: 100, y: 100, width: 700, height: 700
+      super app, 'Vet', opts: DECOR_ALL, x: 0, y: 0, width: 800, height: 600
 
+      @fmenubar = FXMenuBar.new self, LAYOUT_SIDE_TOP | LAYOUT_FILL_X
+      @fstatusbar = FXStatusBar.new self, LAYOUT_SIDE_BOTTOM | LAYOUT_FILL_X | STATUSBAR_WITH_DRAGCORNER
       @fmdiclient = FXMDIClient.new self, LAYOUT_FILL_X | LAYOUT_FILL_Y
 
+      create_mdi_menu
+     
       create_mdi_childs
     end
 
     private
 
+    def create_mdi_menu
+      @fmdimenu = FXMDIMenu.new self, @fmdiclient
+      FXMDIWindowButton.new @fmenubar, @fmdimenu, @fmdiclient, FXMDIClient::ID_MDI_MENUWINDOW, LAYOUT_LEFT
+      
+      FXMDIDeleteButton.new @fmenubar, @fmdiclient, FXMDIClient::ID_MDI_MENUCLOSE, FRAME_RAISED | LAYOUT_RIGHT
+      FXMDIRestoreButton.new @fmenubar, @fmdiclient, FXMDIClient::ID_MDI_MENURESTORE, FRAME_RAISED | LAYOUT_RIGHT
+      FXMDIMinimizeButton.new @fmenubar, @fmdiclient, FXMDIClient::ID_MDI_MENUMINIMIZE, FRAME_RAISED | LAYOUT_RIGHT
+    end
+    
     def create_mdi_childs
-      @mwelcome = WVetWindow.new @fmdclient
+      @mwelcome = WVetWindow.new @fmdiclient, 225, 0, 350, 350
       @mappointments = WAppointment_List.new @fmdiclient
+      @mappointments.hide
       # @mstock = WStock.new @fmdiclient
       # @mpurchase = WPurchase.new @fmdiclient
       # @msell = WSell.new @fmdiclient
