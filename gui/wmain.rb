@@ -71,9 +71,9 @@ module GUI
     def create_mdi_childs
       @mwelcome = WVetWindow.new @fmdiclient, 225, 0, 350, 350
       @mappointments = WAppointment_List.new @fmdiclient
-      @mstock = WStock.new @fmdiclient, 'Stock', nil, nil, 0, 10, 10, 700, 700
-      @mpurchase = WPurchase.new @fmdiclient, 'Compra', nil, nil, 0, 10, 10, 700, 700
-      @msell = WSell.new @fmdiclient, 'Venta', nil, nil, 0, 10, 10, 700, 700
+      @mstock = WStock.new @fmdiclient, 'Stock', nil, nil, 0, 10, 10, 700, 500
+      @mpurchase = WPurchase.new @fmdiclient, 'Compra', nil, nil, 0, 10, 10, 700, 500
+      @msell = WSell.new @fmdiclient, 'Venta', nil, nil, 0, 10, 10, 700, 500
       
       @mstock.hide
       @msell.hide
