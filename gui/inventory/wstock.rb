@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# frozen_string_literal: true
+
 require 'fox16'
 require_relative '../../models'
 require_relative 'wproduct_list'
@@ -34,11 +36,15 @@ module GUI
       @wproduct = WProduct.new @fright, 'Nuevo Producto', opts: FRAME_NORMAL | LAYOUT_FILL_X
       @btnnew = FXButton.new @fright, 'Nuevo producto', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
 
+      assign_handlers
       update_widgets
     end
 
     def add_product(product)
-      @wpf.add product
+      return false unless product.valid?
+
+      product.save
+      @wpf.add_product product
       update_widgets
     end
 
@@ -53,12 +59,11 @@ module GUI
     def assign_handlers
       @btnnew.connect SEL_COMMAND do |_sender, _sel, _data|
         p = @wproduct.product
-        p.save
+        puts "Adding #{p}"
 
         add_product p unless @wpf.stock.member? p
 
         reset_input
-        update_widgets
       end
     end
   end

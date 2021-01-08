@@ -76,9 +76,7 @@ module GUI
       update_widgets
     end
 
-    def stock
-      stock
-    end
+    attr_reader :stock
 
     # Add a product
     #
