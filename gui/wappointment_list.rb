@@ -28,7 +28,7 @@ module GUI
   # Appointment widget
   class WAppointment_List < FXMDIChild
     def initialize(mdiclient)
-      super mdiclient, 'Turnos', nil, nil, 0, 10, 10, 350, 700
+      super mdiclient, 'Turnos', nil, nil, 0, 10, 10, 700, 700
 
       @lst = []
       
@@ -76,6 +76,12 @@ module GUI
         update_widgets
       end
 
+      # Avoid deleting when closing
+      self.connect SEL_CLOSE do
+        hide
+        1
+      end
+      
       set_date Time.now # Also calls update_widgets
     end
 

@@ -52,6 +52,10 @@ module GUI
       @btnsell.connect SEL_COMMAND do |_sender, _sel, _data|
         @wsell.show
       end
+      connect SEL_CLOSE do
+        hide
+        1
+      end
     end
 
     # Return a random image path.
