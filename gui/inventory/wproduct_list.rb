@@ -28,7 +28,7 @@ module GUI
   include Models
 
   # Widget to display a list of products.
-  class WProductList < FXMainWindow
+  class WProductList < FXMDIChild
     def initialize(...)
       super(...)
 

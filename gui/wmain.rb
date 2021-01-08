@@ -19,6 +19,9 @@
 
 require 'fox16'
 require_relative 'wappointment_list'
+require_relative 'inventory/wstock'
+require_relative 'inventory/wpurchase'
+require_relative 'inventory/wsell'
 
 # User interface module.
 module GUI
@@ -68,9 +71,13 @@ module GUI
     def create_mdi_childs
       @mwelcome = WVetWindow.new @fmdiclient, 225, 0, 350, 350
       @mappointments = WAppointment_List.new @fmdiclient
-      # @mstock = WStock.new @fmdiclient
-      # @mpurchase = WPurchase.new @fmdiclient
-      # @msell = WSell.new @fmdiclient
+      @mstock = WStock.new @fmdiclient, 'Stock', nil, nil, 0, 10, 10, 700, 700
+      @mpurchase = WPurchase.new @fmdiclient, 'Compra', nil, nil, 0, 10, 10, 700, 700
+      @msell = WSell.new @fmdiclient, 'Venta', nil, nil, 0, 10, 10, 700, 700
+      
+      @mstock.hide
+      @msell.hide
+      @mpurchase.hide
       @fmdiclient.setActiveChild @mwelcome
     end
 
@@ -81,10 +88,13 @@ module GUI
       @mappointments.show
     end
     def on_stock_clicked(_sender, _sel, _ptr)
+      @mstock.show
     end
     def on_compra_clicked(_sender, _sel, _ptr)
+      @mpurchase.show
     end
     def on_venta_clicked(_sender, _sel, _ptr)
+      @msell.show
     end
     
   end
