@@ -57,11 +57,18 @@ module GUI
     private
 
     def assign_handlers
+      @wpf.on :on_double_click do |product|
+        wpf_double_clicked product
+      end
       @btnnew.connect SEL_COMMAND do |_sender, _sel, _data|
         p = @wproduct.product
         add_product p unless @wpf.stock.member? p
         reset_input
       end
+    end
+
+    def wpf_double_clicked(product)
+      @wproduct.edit product
     end
   end
 end

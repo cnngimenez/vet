@@ -42,6 +42,7 @@ module GUI
       @txtstock = FXTextField.new self, 4, opts: LAYOUT_FILL_X | TEXTFIELD_NORMAL | TEXTFIELD_INTEGER
       @lblcost = FXLabel.new self, 'Precio unitario de venta:'
       @txtcost = FXTextField.new self, 4, opts: LAYOUT_FILL_X | TEXTFIELD_NORMAL | TEXTFIELD_REAL
+      @lblpurchased = FXLabel.new self, '(Precio de última compra: $0.0)'
 
       update_widgets
     end
@@ -79,10 +80,12 @@ module GUI
         @txtname.text = ''
         @txtcode.text = ''
         @txtstock.text = '0'
+        @lblpurchased.text = '(Nuevo producto)'
       else
         @txtname.text = @product.name
         @txtcode.text = @product.code
         @txtstock.text = @product.stock.to_s
+        @lblpurchased.text = "(Precio de ultima compra: #{@product.last_purchased_price})"
       end
     end
 

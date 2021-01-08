@@ -35,7 +35,9 @@ module GUI
 
       @stock = Product.all.to_a
       @filtered = []
-      @actions = { on_select: nil, on_deselect: nil }
+      @actions = { on_select: nil,
+                   on_deselect: nil,
+                   on_double_click: nil }
 
       @ftxtfilter = FXTextField.new self, 50, opts: TEXTFIELD_NORMAL | LAYOUT_FILL_X
       @flist = FXList.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
@@ -58,6 +60,11 @@ module GUI
 
     def on_deselect(sender, sel, data)
       @actions[:on_deselect]&.call sender, sel, data
+    end
+
+    def on_double_click(_sender, _sel, data)
+      product = @stock[data]
+      @actions[:on_double_click]&.call product
     end
 
     def on(action, &block)
@@ -116,6 +123,9 @@ module GUI
       end
       @flist.connect SEL_DESELECTED do |sender, sel, data|
         on_deselect sender, sel, data
+      end
+      @flist.connect SEL_DOUBLECLICKED do |sender, sel, data|
+        on_double_click sender, sel, data
       end
     end
   end
