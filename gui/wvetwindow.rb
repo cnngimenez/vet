@@ -28,12 +28,17 @@ include Models
 module GUI
   class WVetWindow < FXMainWindow
     def initialize(app)
-      super(app, "Vet", :opts => DECOR_ALL, :x => 100, :y => 100)
+      super(app, "Vet", :opts => DECOR_ALL,
+            :x => 100, :y => 100, :width => 700, :height => 700)
       
-      @wstock = WStock.new app, "Stock", :width => 500, :opts => DECOR_ALL
+      @wstock = WStock.new app, "Stock",
+                           :width => 700, :height => 500, :opts => DECOR_ALL,
+                           :x => 100, :y => 100
       @wstock.stock = Product.all.to_a
-      @wpurchase = WPurchase.new app, "Compra de productos"
-      @wsell = WSell.new app, "Venta de productos"
+      @wpurchase = WPurchase.new app, "Compra de productos",
+                                 :width => 500, :height => 500, :x => 100, :y => 100
+      @wsell = WSell.new app, "Venta de productos",
+                         :width => 500, :height => 500, :x => 100, :y => 100
       
       @f1 = FXHorizontalFrame.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
       @f2 = FXVerticalFrame.new @f1, :opts => LAYOUT_FILL_X      

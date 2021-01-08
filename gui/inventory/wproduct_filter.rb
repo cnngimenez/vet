@@ -1,5 +1,5 @@
 # Copyright 2020 Christian Gimenez
-# 
+#
 # wproductfilter.rb
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,41 +15,36 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# frozen_string_literal: true
+
 require 'fox16'
-include Fox
-
 require_relative '../../models'
-include Models
 
+# User Interface module
 module GUI
+  include Models
+  include Fox
+
+  # Product Filter Widget
+  #
+  # Show a list of products with a filter at the top. The when the user write
+  # a text on the filter only shows the products with that text on its name.
   class WProductFilter < FXVerticalFrame
     def initialize(...)
       super(...)
 
       @stock = Product.all.to_a
-      @filtered = Array.new
-      
-      @actions = {
-        on_select: nil,
-        on_deselect: nil
-      }
-      
-      @ftxtfilter = FXTextField.new self, 50, :opts => TEXTFIELD_NORMAL | LAYOUT_FILL_X
-      @flist = FXList.new self, :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
+      @filtered = []
+      @actions = { on_select: nil, on_deselect: nil }
 
-      @ftxtfilter.connect SEL_CHANGED do |sender, sel, data|
-        filter data
-      end
-      @flist.connect SEL_SELECTED do |sender, sel, data|
-        on_select sender, sel, data
-      end
-      @flist.connect SEL_DESELECTED do |sender, sel, data|
-        on_deselect sender, sel, data
-      end
+      @ftxtfilter = FXTextField.new self, 50, opts: TEXTFIELD_NORMAL | LAYOUT_FILL_X
+      @flist = FXList.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
 
-      filter "" # This updates widgets while emptying the filter.
+      assign_handlers
+
+      filter '' # This updates widgets while emptying the filter.
     end
-    
+
     def filter(data)
       @filtered = @stock.select do |product|
         product.name.include? data
@@ -58,15 +53,11 @@ module GUI
     end
 
     def on_select(sender, sel, data)
-      unless @actions[:on_select].nil?
-        @actions[:on_select].call sender, sel, data
-      end
+      @actions[:on_select]&.call sender, sel, data
     end
 
     def on_deselect(sender, sel, data)
-      unless @actions[:on_deselect].nil?
-        @actions[:on_deselect].call sender, sel, data
-      end
+      @actions[:on_deselect]&.call sender, sel, data
     end
 
     def on(action, &block)
@@ -75,20 +66,27 @@ module GUI
 
     def update_stock
       @stock = Product.all.to_a
-      filter ""
+      filter ''
       update_widgets
     end
 
     def stock=(lst)
       @stock = lst
-      filter ""
+      filter ''
       update_widgets
     end
-        
+
     def stock
-      return stock
+      stock
     end
-    
+
+    # Add a product
+    #
+    # @param product [Models.Product]
+    def add_product(product)
+      @stock.push product
+    end
+
     def selected_product
       return nil if @flist.currentItem.nil?
 
@@ -98,17 +96,28 @@ module GUI
     def reset_input
       @flist.killSelection
     end
-    
+
     def update_widgets
       @flist.clearItems
       @filtered.each do |product|
         @flist.appendItem product.to_s
       end
 
-      if @filtered.count == 1
-        @flist.selectItem 0, true
+      @flist.selectItem 0, true if @filtered.count == 1
+    end
+
+    private
+
+    def assign_handlers
+      @ftxtfilter.connect SEL_CHANGED do |_sender, _sel, data|
+        filter data
+      end
+      @flist.connect SEL_SELECTED do |sender, sel, data|
+        on_select sender, sel, data
+      end
+      @flist.connect SEL_DESELECTED do |sender, sel, data|
+        on_deselect sender, sel, data
       end
     end
-    
-  end # WProductFiletr
-end # GUI
+  end
+end

@@ -35,7 +35,7 @@ module GUI
         p = @wproduct.product
         p.save
 
-        add_product p unless @stock.member? p
+        add_product p unless @wpf.stock.member? p
 
         reset_input
         update_widgets
@@ -45,7 +45,7 @@ module GUI
     end
 
     def add_product(product)
-      @stock.push product
+      @wpf.add product
       update_widgets
     end
     
