@@ -1,5 +1,5 @@
 # Copyright 2020 Christian Gimenez
-# 
+#
 # inventory.rb
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,26 +15,36 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# frozen_string_literal: true
+
 require 'active_record'
 
+# Models module.
 module Models
-
+  # Product model
+  #
+  # Registers a product name, stock and its selling cost.
   class Product < ActiveRecord::Base
     has_many :purchases
     has_many :sells
-    
-    validates :name, presence: true
-    validates :stock, presence: true, numericality: {only_integer: true}
-    
-    def to_s
-      "#{name} (#{code}) #{stock}"
-    end
-  end # Product
 
-  class Purchase < ActiveRecord::Base    
+    validates :name, presence: true
+    validates :stock, presence: true, numericality: { only_integer: true }
+    validates :unitary_cost, presence: true, numericality: true
+
+    def to_s
+      "#{name} (#{code}) $#{unitary_cost} #{stock}u"
+    end
+  end
+
+  # Purchase model.
+  #
+  # Each purchase to a mayor producer/provider is registered with its cost and
+  # the product purchased.
+  class Purchase < ActiveRecord::Base
     belongs_to :product
 
-    validates :amount, presence: true, numericality: {only_integer: true}
+    validates :amount, presence: true, numericality: { only_integer: true }
     validates :product, presence: true
     validates :unitary_cost, presence: true, numericality: true
     validates :date, presence: true, numericality: true
@@ -50,7 +60,7 @@ module Models
     #
     # @param time_obj [Time]
     def t_date=(time_obj)
-      date = time_obj.to_i
+      self.date = time_obj.to_i
     end
 
     # Return the #date attribute with a Time instance.
@@ -59,28 +69,31 @@ module Models
     def t_date
       Time.at date
     end
-    
+
     def short_name
-      if product.nil?
-        " " * 10
-      else        
-        if product.name.length > 10
-          product.name[0..10]
-        else
-          product.name + " " * (10 - product.name.length)
-        end
+      return ' ' * 10 if product.nil?
+
+      name = product.name
+      if name.length > 10
+        name[0..10]
+      else
+        name + ' ' * (10 - name.length)
       end
     end
 
     def to_s
       "#{short_name} $#{unitary_cost} x #{amount} = #{total}"
     end
-  end # Purchase
+  end
 
+  # Sell model.
+  #
+  # Each sell to a client is registered with date, cost, the product and the
+  # amount sold.
   class Sell < ActiveRecord::Base
     belongs_to :product
 
-    validates :amount, presence: true, numericality: {only_integer: true}
+    validates :amount, presence: true, numericality: { only_integer: true }
     validates :product, presence: true
     validates :unitary_cost, presence: true, numericality: true
     validates :date, presence: true, numericality: true
@@ -88,22 +101,20 @@ module Models
     def total
       unitary_cost * amount
     end
-    
+
     def short_name
-      if product.nil?
-        " " * 10
-      else        
-        if product.name.length > 10
-          product.name[0..10]
-        else
-          product.name + " " * (10 - product.name.length)
-        end
+      return ' ' * 10 if product.nil?
+
+      name = product.name
+      if name.length > 10
+        name[0..10]
+      else
+        name + ' ' * (10 - name.length)
       end
     end
-    
+
     def to_s
       "#{short_name} $#{unitary_cost} x #{amount} = #{total}"
     end
-  end # Sell
-  
-end # Models
+  end
+end
