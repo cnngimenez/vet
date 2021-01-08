@@ -33,11 +33,28 @@ module GUI
       @fmdiclient = FXMDIClient.new self, LAYOUT_FILL_X | LAYOUT_FILL_Y
 
       create_mdi_menu
+      create_window_menu
      
       create_mdi_childs
     end
 
     private
+    
+    def create_window_menu
+      menu = FXMenuPane.new self
+      cmd = FXMenuCommand.new menu, '&Bienvenida'
+      cmd.connect SEL_COMMAND, method(:on_bienvenida_clicked)
+      cmd = FXMenuCommand.new menu, '&Turnos'
+      cmd.connect SEL_COMMAND, method(:on_turnos_clicked)
+      cmd = FXMenuCommand.new menu, '&Stock'
+      cmd.connect SEL_COMMAND, method(:on_stock_clicked)
+      cmd = FXMenuCommand.new menu, '&Compra'
+      cmd.connect SEL_COMMAND, method(:on_compra_clicked)
+      cmd = FXMenuCommand.new menu, '&Venta'
+      cmd.connect SEL_COMMAND, method(:on_venta_clicked)
+
+      FXMenuTitle.new @fmenubar, '&Ventanas', nil, menu
+    end
 
     def create_mdi_menu
       @fmdimenu = FXMDIMenu.new self, @fmdiclient
@@ -51,10 +68,24 @@ module GUI
     def create_mdi_childs
       @mwelcome = WVetWindow.new @fmdiclient, 225, 0, 350, 350
       @mappointments = WAppointment_List.new @fmdiclient
-      @mappointments.hide
       # @mstock = WStock.new @fmdiclient
       # @mpurchase = WPurchase.new @fmdiclient
       # @msell = WSell.new @fmdiclient
+      @fmdiclient.setActiveChild @mwelcome
     end
+
+    def on_bienvenida_clicked(_sender, _sel, _ptr)
+      @mwelcome.show
+    end
+    def on_turnos_clicked(_sender, _sel, _ptr)
+      @mappointments.show
+    end
+    def on_stock_clicked(_sender, _sel, _ptr)
+    end
+    def on_compra_clicked(_sender, _sel, _ptr)
+    end
+    def on_venta_clicked(_sender, _sel, _ptr)
+    end
+    
   end
 end
