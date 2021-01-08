@@ -36,6 +36,7 @@ module GUI
 
       @stock = Product.all.to_a
 
+      @lblproduct = FXLabel.new @fright, 'Producto:'
       @lblcant = FXLabel.new @fright, 'Cantidad:'
       @txtcant = FXTextField.new @fright, 4, opts: LAYOUT_FILL_X | TEXTFIELD_NORMAL | TEXTFIELD_INTEGER
       @lblprice = FXLabel.new @fright, 'Precio unitario:'
@@ -43,16 +44,6 @@ module GUI
       @lblcant = FXLabel.new @fright, 'Descripción:'
       @txtdesc = FXText.new @fright, opts: LAYOUT_FILL_X
       @btnaction = FXButton.new @fright, 'Acción', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
-      @btnaction.connect SEL_COMMAND do |_sender, _sel, _data|
-        purr = create_obj  amount: @txtcant.text.to_i,
-                           unitary_cost: @txtprice.text.to_f,
-                           desc: @txtdesc.text,
-                           product: selected_product
-        purr.t_date = Time.now
-        add_obj purr
-
-        reset_input
-      end
 
       @lst_objs = []
       @flst_items = FXList.new @fmain, opts: LAYOUT_FILL_X | LIST_NORMAL
@@ -140,6 +131,16 @@ module GUI
     private
 
     def assign_handlers
+      @btnaction.connect SEL_COMMAND do |_sender, _sel, _data|
+        purr = create_obj  amount: @txtcant.text.to_i,
+                           unitary_cost: @txtprice.text.to_f,
+                           desc: @txtdesc.text,
+                           product: selected_product
+        purr.t_date = Time.now
+        add_obj purr
+
+        reset_input
+      end
       @btnsave.connect SEL_COMMAND do |_sender, _sel, _data|
         confirm_save
       end
@@ -147,6 +148,14 @@ module GUI
         cancel
       end
       @wpf.on :on_select do |_sender, _sel, _data|
+        product = @wpf.selected_product
+        if product.unitary_cost.nil?
+          cost = 1.0
+        else
+          cost = product.unitary_cost
+        end
+        @txtprice.text = cost.to_s
+        @lblproduct.text = "Producto: #{product.name}"
         enable_purchase
       end
       @wpf.on :on_deselect do |_sender, _sel, _data|
