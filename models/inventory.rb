@@ -32,6 +32,16 @@ module Models
     validates :stock, presence: true, numericality: { only_integer: true }
     validates :unitary_cost, presence: true, numericality: true
 
+    # @return [float]
+    def last_purchased_price
+      purr = purchases.order(:date).last
+      if purr.nil?
+        0.0
+      else
+        purr.unitary_cost
+      end
+    end
+
     def to_s
       "#{name} (#{code}) $#{unitary_cost} #{stock}u"
     end
