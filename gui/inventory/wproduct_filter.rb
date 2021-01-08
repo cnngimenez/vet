@@ -96,7 +96,7 @@ module GUI
     def selected_product
       return nil if @flist.currentItem.nil?
 
-      @stock[@flist.currentItem]
+      @filtered[@flist.currentItem]
     end
 
     def reset_input
