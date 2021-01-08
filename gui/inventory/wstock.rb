@@ -59,10 +59,7 @@ module GUI
     def assign_handlers
       @btnnew.connect SEL_COMMAND do |_sender, _sel, _data|
         p = @wproduct.product
-        puts "Adding #{p}"
-
         add_product p unless @wpf.stock.member? p
-
         reset_input
       end
     end
