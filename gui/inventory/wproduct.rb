@@ -66,6 +66,10 @@ module GUI
       update_widgets
     end
 
+    def editing?
+      !@product.nil?
+    end
+
     def new_product
       Product.create name: @txtname.text,
                      code: @txtcode.text,

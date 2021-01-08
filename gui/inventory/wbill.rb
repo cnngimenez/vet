@@ -1,6 +1,6 @@
 # coding: utf-8
 # Copyright 2020 Christian Gimenez
-# 
+#
 # wbill.rb
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,15 +16,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# frozen_string_literal: true
+
 require 'fox16'
-include Fox
-
 require_relative '../../models'
-include Models
-
 require_relative 'wproduct_list'
 
+# User interface module
 module GUI
+  include Fox
+  include Models
   # A bill like form.
   #
   # This form allows the user to enter several items to purchase or sell.
@@ -35,48 +36,33 @@ module GUI
 
       @stock = Product.all.to_a
 
-      @lblcant = FXLabel.new @fright, "Cantidad:"
-      @txtcant = FXTextField.new @fright, 4, :opts => LAYOUT_FILL_X | TEXTFIELD_NORMAL |
-                                                     TEXTFIELD_INTEGER
-      @lblprice = FXLabel.new @fright, "Precio unitario:"
-      @txtprice = FXTextField.new @fright, 4, :opts => LAYOUT_FILL_X | TEXTFIELD_NORMAL |
-                                                      TEXTFIELD_REAL
-      @lblcant = FXLabel.new @fright, "Descripción:"
-      @txtdesc = FXText.new @fright, :opts => LAYOUT_FILL_X
-      
-      @btnaction = FXButton.new @fright, "Acción", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
-      @btnaction.connect SEL_COMMAND do |sender, sel, data|
+      @lblcant = FXLabel.new @fright, 'Cantidad:'
+      @txtcant = FXTextField.new @fright, 4, opts: LAYOUT_FILL_X | TEXTFIELD_NORMAL | TEXTFIELD_INTEGER
+      @lblprice = FXLabel.new @fright, 'Precio unitario:'
+      @txtprice = FXTextField.new @fright, 4, opts: LAYOUT_FILL_X | TEXTFIELD_NORMAL | TEXTFIELD_REAL
+      @lblcant = FXLabel.new @fright, 'Descripción:'
+      @txtdesc = FXText.new @fright, opts: LAYOUT_FILL_X
+      @btnaction = FXButton.new @fright, 'Acción', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
+      @btnaction.connect SEL_COMMAND do |_sender, _sel, _data|
         purr = create_obj  amount: @txtcant.text.to_i,
                            unitary_cost: @txtprice.text.to_f,
                            desc: @txtdesc.text,
                            product: selected_product
+        purr.t_date = Time.now
         add_obj purr
 
         reset_input
       end
 
-      @lst_objs = Array.new
-      @flst_items = FXList.new @fmain, :opts => LAYOUT_FILL_X | LIST_NORMAL
-      @lbltotal = FXLabel.new @fmain, "Total: "
+      @lst_objs = []
+      @flst_items = FXList.new @fmain, opts: LAYOUT_FILL_X | LIST_NORMAL
+      @lbltotal = FXLabel.new @fmain, 'Total: '
 
-      @fbtns = FXHorizontalFrame.new @fmain, :opts => LAYOUT_FILL_X
-      @btnsave = FXButton.new @fbtns, "Guardar", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
-      @btncancel = FXButton.new @fbtns, "Cancelar", :opts => LAYOUT_CENTER_X | BUTTON_NORMAL
-      
-      @btnsave.connect SEL_COMMAND do |sender, sel, data|
-        confirm_save
-      end
-      @btncancel.connect SEL_COMMAND do |sender, sel, data|
-        cancel
-      end
-      
-      @wpf.on :on_select do |sender, sel, data|
-        enable_purchase
-      end
-      @wpf.on :on_deselect do |sender, sel, data|
-        enable_purchase FALSE
-      end
+      @fbtns = FXHorizontalFrame.new @fmain, opts: LAYOUT_FILL_X
+      @btnsave = FXButton.new @fbtns, 'Guardar', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
+      @btncancel = FXButton.new @fbtns, 'Cancelar', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
 
+      assign_handlers
       reset_input
       update_widgets
     end
@@ -88,21 +74,22 @@ module GUI
 
     def confirm_save
       @lst_objs.each do |purr|
+        puts purr.errors.objects.to_s unless purr.valid?
         purr.save
         purr.product.stock += purr.amount
         purr.product.save
       end
-      reset_input      
-      @lst_objs = Array.new
+      reset_input
+      @lst_objs = []
       close TRUE
     end
 
     def cancel
       reset_input
-      @lst_objs = Array.new
+      @lst_objs = []
       close TRUE
     end
-    
+
     protected
 
     # This is used to create an instance of the Purchase or Sell class.
@@ -112,10 +99,10 @@ module GUI
     # @param data [Hash] Information obtained from the form. Keys are: amount,
     #   unitary_cost, desc and product.
     # @return [Object]
-    def create_obj(data)
-      raise "WBill#create_obj must be implemented by the subclass"
+    def create_obj(_data)
+      raise 'WBill#create_obj must be implemented by the subclass'
     end
-    
+
     def enable_purchase(enable=TRUE)
       if enable
         @txtdesc.enable
@@ -132,15 +119,15 @@ module GUI
 
     def reset_input
       super
-      @txtdesc.text = ""
-      @txtcant.text = "1"
-      @txtprice.text = "1.0"
+      @txtdesc.text = ''
+      @txtcant.text = '1'
+      @txtprice.text = '1.0'
       enable_purchase FALSE
     end
 
     def update_widgets
       super
-      
+
       @flst_items.clearItems
       total = 0
       @lst_objs.each do |purr|
@@ -149,6 +136,22 @@ module GUI
       end
       @lbltotal.text = "Total: #{total}"
     end
-    
-  end # WPurchase
-end # GUI
+
+    private
+
+    def assign_handlers
+      @btnsave.connect SEL_COMMAND do |_sender, _sel, _data|
+        confirm_save
+      end
+      @btncancel.connect SEL_COMMAND do |_sender, _sel, _data|
+        cancel
+      end
+      @wpf.on :on_select do |_sender, _sel, _data|
+        enable_purchase
+      end
+      @wpf.on :on_deselect do |_sender, _sel, _data|
+        enable_purchase FALSE
+      end
+    end
+  end
+end

@@ -1,6 +1,6 @@
 # coding: utf-8
 # Copyright 2020 Christian Gimenez
-# 
+#
 # wpurchase.rb
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,26 +16,31 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# frozen_string_literal: true
+
 require 'fox16'
-include Fox
-
 require_relative '../../models'
-include Models
-
 require_relative 'wbill'
 
+# User interface module
 module GUI
+  include Fox
+  include Models
+
+  # Purchase window
+  #
+  # Show a bill-like window to fill with purchases.
   class WPurchase < WBill
     def initialize(...)
       super(...)
 
-      @btnaction.text = "Comprar"
+      @btnaction.text = 'Comprar'
     end
 
     protected
-    
+
     def create_obj(data)
       Purchase.create data
     end
-  end # WPurchase
-end # GUI
+  end
+end
