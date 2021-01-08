@@ -31,8 +31,8 @@ db.migrate
 
 @app = FXApp.new 'Vet', 'Vet'
 
-@vw = WVetWindow.new @app
-@vw.appointment.lst = Models::Appointment.limit(10).to_a
+# @vw = WVetWindow.new @app
+@vw = WMain.new @app
 @vw.show
 
 @app.create

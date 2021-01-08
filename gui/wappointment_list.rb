@@ -26,12 +26,12 @@ include Models
 
 module GUI
   # Appointment widget
-  class WAppointment_List < FXVerticalFrame
-    def initialize(...)
-      super(...)
+  class WAppointment_List < FXMDIChild
+    def initialize(mdiclient)
+      super mdiclient, 'Turnos', nil, nil, 0, 0, 0, 500, 500
 
-      @lst = Array.new
-
+      @lst = []
+      
       @fxh1 = FXHorizontalFrame.new self,
                                     :opts => LAYOUT_FILL_X | LAYOUT_FILL_Y
       @cal = FXCalendar.new @fxh1
@@ -76,7 +76,7 @@ module GUI
         update_widgets
       end
 
-      update_widgets
+      set_date Time.now # Also calls update_widgets
     end
 
     def edit_appointment_num(position)

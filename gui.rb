@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+require_relative 'gui/wmain'
 require_relative 'gui/wtime'
 require_relative 'gui/wtimerange'
 require_relative 'gui/wappointment_list'
