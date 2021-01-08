@@ -25,17 +25,19 @@ module GUI
     def initialize(mdiclient, x = 0, y = 0, width = 500, height = 500)
       super mdiclient, 'Vet', nil, nil, 0, x, y, width, height
 
-      @f1 = FXHorizontalFrame.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
-      @f2 = FXVerticalFrame.new @f1, opts: LAYOUT_FILL_X
+      @f1 = FXVerticalFrame.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
+      @f2 = FXHorizontalFrame.new @f1, opts: LAYOUT_FILL_X
 
       @img = FXPNGImage.new app, File.binread(random_image_path)
       @imageview = FXImageFrame.new @f2, @img, width: 100, opts: 0
+      @lblwelcome = FXLabel.new @f2, '  Vet  ', opts: LAYOUT_FILL_X | LAYOUT_FILL_Y | LABEL_NORMAL
+      # @lblwelcome.justify = JUSTIFY_CENTER_X
+      font = FXFont.new getApp, 'courier', 25, FONTWEIGHT_BOLD
+      @lblwelcome.font = font
 
-      @btnstock = FXButton.new @f2, 'Stock de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
-      @btnstock = FXButton.new @f2, 'Compra de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
-      @btnsell = FXButton.new @f2, 'Venta de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
-
-      @lblwelcome = FXLabel.new @f1, 'Vet'
+      @btnstock = FXButton.new @f1, 'Stock de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
+      @btnstock = FXButton.new @f1, 'Compra de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
+      @btnsell = FXButton.new @f1, 'Venta de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
 
       assign_handlers
     end
