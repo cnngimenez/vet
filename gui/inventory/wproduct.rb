@@ -108,18 +108,21 @@ module GUI
       return if @txtname.text.empty?
 
       @txtcode.setFocus
+      @txtcode.selectAll
     end
 
     def on_txtcode_enter(...)
       return if @txtcode.text.empty?
 
       @txtstock.setFocus
+      @txtstock.selectAll
     end
 
     def on_txtstock_enter(...)
       return if @txtstock.text.empty?
 
       @txtcost.setFocus
+      @txtcost.selectAll
     end
 
     # What to do when user press enter on txtcost.
