@@ -1,6 +1,6 @@
 # Copyright 2021 Christian Gimenez
 #
-# wtips.rb
+# wtipbutton.rb
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,34 +18,35 @@
 # frozen_string_literal: true
 
 require 'fox16'
+require_relative 'wtips'
 
-# User interface module.
 module GUI
   include Fox
-  # Tips widget
-  #
-  # A widget to show tips for the user.
-  class WTips < FXMDIChild
-    def initialize(mdiclient, tip_name)
-      super mdiclient, 'Tips', nil, nil, 0, 10, 10, 350, 450
+  class WTipButton < FXButton
+    def initialize(parent, mdiclient, tip_name, icon='tips_and_tricks')
+      super parent, ''
+      self.icon = load_icon icon
+
+      @mdiclient = mdiclient
       @tip_name = tip_name
 
-      f1 = FXVerticalFrame.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
-      @txt = FXText.new f1, nil, 0, TEXT_READONLY | TEXT_WORDWRAP | LAYOUT_FILL_X | LAYOUT_FILL_Y
-
-      load_tips
+      connect SEL_COMMAND, method(:on_clicked)
+    end
+    
+    def load_icon(name)
+      filename = File.expand_path("../imgs/#{name}.png", __FILE__)
+      File.open(filename, 'rb') do |f|
+        FXPNGIcon.new(getApp, f.read)
+      end
     end
 
     protected
 
-    def tip_filepath
-      "gui/tips/#{@tip_name}.md"
+    def on_clicked(...)
+      w = WTips.new @mdiclient, @tip_name
+      w.create
+      @mdiclient.setActiveChild w
     end
 
-    def load_tips
-      return unless File.exist? tip_filepath
-
-      @txt.text = File.read tip_filepath
-    end
   end
 end
