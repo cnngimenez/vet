@@ -89,6 +89,7 @@ module GUI
     #
     # @param product [Models.Product]
     def add_product(product)
+      return if @stock.member? product
       @stock.push product
       filter ''
     end

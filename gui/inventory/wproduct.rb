@@ -43,7 +43,11 @@ module GUI
       @lblcost = FXLabel.new self, 'Precio unitario de venta:'
       @txtcost = FXTextField.new self, 4, opts: LAYOUT_FILL_X | TEXTFIELD_NORMAL | TEXTFIELD_REAL
       @lblpurchased = FXLabel.new self, '(Precio de última compra: $0.0)'
+      @lblwarnings = FXLabel.new self, ''
+      @lblwarnings.textColor = FXColor::Red
+      @lblwarnings.font = FXFont.new getApp, 'Courier,100,normal,italic'
 
+      assign_handlers
       update_widgets
     end
 
@@ -79,17 +83,38 @@ module GUI
 
     private
 
+    def on_txtcost_changed(_sender, _sel, data)
+      return unless editing?
+
+      cost = data.to_f
+      last_price = @product.last_purchased_price
+
+      if cost < last_price
+        @lblwarnings.text = "Advertencia: El precio de venta es\nmás barato que el precio de compra."
+      elsif cost > last_price + last_price * 0.5
+        @lblwarnings.text = "Advertencia: El precio de venta supera\nel 50% de aumento al del precio de compra."
+      else
+        @lblwarnings.text = ''
+      end
+    end
+
+    def assign_handlers
+      @txtcost.connect SEL_CHANGED, method(:on_txtcost_changed)
+    end
+
     def update_widgets
       if @product.nil?
         @txtname.text = ''
         @txtcode.text = ''
         @txtstock.text = '0'
+        @txtcost.text = '1.0'
         @lblpurchased.text = '(Nuevo producto)'
       else
         @txtname.text = @product.name
         @txtcode.text = @product.code
         @txtstock.text = @product.stock.to_s
-        @lblpurchased.text = "(Precio de ultima compra: #{@product.last_purchased_price})"
+        @txtcost.text = @product.unitary_cost.to_s
+        @lblpurchased.text = "(Precio de ultima compra: $#{@product.last_purchased_price})"
       end
     end
 
@@ -99,6 +124,7 @@ module GUI
       @product.name = @txtname.text
       @product.code = @txtcode.text
       @product.stock = @txtstock.text.to_i
+      @product.unitary_cost = @txtcost.text.to_f
     end
   end
 end

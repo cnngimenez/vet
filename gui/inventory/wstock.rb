@@ -34,7 +34,7 @@ module GUI
     def initialize(...)
       super(...)
 
-      @wproduct = WProduct.new @fright, 'Nuevo Producto', opts: FRAME_NORMAL | LAYOUT_FILL_X
+      @wproduct = WProduct.new @fright, 'Producto', opts: FRAME_NORMAL | LAYOUT_FILL_X
       @btnnew = FXButton.new @fright, 'Nuevo producto', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
       @lblpurchased = FXLabel.new @fright, 'Últimas 10 compras a vendedor:'
       @lstpurchased = FXList.new @fright, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
@@ -46,8 +46,9 @@ module GUI
     end
 
     def add_product(product)
+      puts product.errors.objects.to_s unless product.valid?
       return false unless product.valid?
-
+      puts "Saving product"
       product.save
       @wpf.add_product product
       update_widgets
@@ -57,6 +58,8 @@ module GUI
 
     def update_widgets
       super
+      @btnnew.text = "Nuevo producto"
+      
       return unless @wproduct.editing?
 
       product = @wproduct.product
@@ -69,6 +72,7 @@ module GUI
       product.sells.limit(10).order('date desc').each do |sell|
         @lstsold.appendItem sell.to_s
       end
+      @btnnew.text = "Guardar"
     end
 
     def reset_input
@@ -83,7 +87,7 @@ module GUI
       end
       @btnnew.connect SEL_COMMAND do |_sender, _sel, _data|
         p = @wproduct.product
-        add_product p unless @wpf.stock.member? p
+        add_product p
         reset_input
       end
     end
