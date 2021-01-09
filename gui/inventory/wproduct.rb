@@ -32,6 +32,7 @@ module GUI
     def initialize(...)
       super(...)
 
+      @actions = { on_data_entered: nil }
       @product = nil
 
       @lblname = FXLabel.new self, 'Nombre:'
@@ -51,6 +52,10 @@ module GUI
       update_widgets
     end
 
+    def on(action, &block)
+      @actions[action] = block
+    end
+
     def product
       if @product.nil?
         new_product
@@ -65,9 +70,10 @@ module GUI
       update_widgets
     end
 
-    def reset
+    def reset(with_focus: false)
       @product = nil
       update_widgets
+      @txtname.setFocus if with_focus
     end
 
     def editing?
@@ -89,17 +95,49 @@ module GUI
       cost = data.to_f
       last_price = @product.last_purchased_price
 
-      if cost < last_price
-        @lblwarnings.text = "Advertencia: El precio de venta es\nmás barato que el precio de compra."
-      elsif cost > last_price + last_price * 0.5
-        @lblwarnings.text = "Advertencia: El precio de venta supera\nel 50% de aumento al del precio de compra."
-      else
-        @lblwarnings.text = ''
-      end
+      @lblwarnings.text = if cost < last_price
+                            "Advertencia: El precio de venta es\nmás barato que el precio de compra."
+                          elsif cost > last_price + last_price * 0.5
+                            "Advertencia: El precio de venta supera\nel 50% de aumento al del precio de compra."
+                          else
+                            ''
+                          end
+    end
+
+    def on_txtname_enter(...)
+      return if @txtname.text.empty?
+
+      @txtcode.setFocus
+    end
+
+    def on_txtcode_enter(...)
+      return if @txtcode.text.empty?
+
+      @txtstock.setFocus
+    end
+
+    def on_txtstock_enter(...)
+      return if @txtstock.text.empty?
+
+      @txtcost.setFocus
+    end
+
+    # What to do when user press enter on txtcost.
+    #
+    # If a text is entered, it call the on_data_entered action without parameters.
+    def on_txtcost_enter(...)
+      return if @txtcost.text.empty?
+
+      @actions[:on_data_entered]&.call
     end
 
     def assign_handlers
       @txtcost.connect SEL_CHANGED, method(:on_txtcost_changed)
+      # Sequence of ENTER presses for easy input.
+      @txtname.connect SEL_COMMAND, method(:on_txtname_enter)
+      @txtcode.connect SEL_COMMAND, method(:on_txtcode_enter)
+      @txtstock.connect SEL_COMMAND, method(:on_txtstock_enter)
+      @txtcost.connect SEL_COMMAND, method(:on_txtcost_enter)
     end
 
     def update_widgets

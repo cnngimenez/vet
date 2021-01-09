@@ -76,19 +76,31 @@ module GUI
     end
 
     def reset_input
-      @wproduct.reset
+      @wproduct.reset with_focus: true
     end
 
     private
 
+    def save_product
+      p = @wproduct.product
+      add_product p
+      reset_input
+    end
+    
     def assign_handlers
+      # Sequence of ENTERS
+      @wproduct.on :on_data_entered do
+        @btnnew.setFocus
+      end
+      @btnnew.connect SEL_KEYPRESS do |_sender, _sel, data|
+        save_product if data.text = "\n"
+      end
+      
       @wpf.on :on_double_click do |product|
         wpf_double_clicked product
       end
       @btnnew.connect SEL_COMMAND do |_sender, _sel, _data|
-        p = @wproduct.product
-        add_product p
-        reset_input
+        save_product
       end
     end
 
