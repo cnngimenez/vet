@@ -63,6 +63,11 @@ module GUI
       cmd.connect SEL_COMMAND, method(:on_purchase_clicked)
       cmd = FXMenuCommand.new menu, '&Venta'
       cmd.connect SEL_COMMAND, method(:on_sell_clicked)
+      FXMenuSeparator.new menu     
+      FXMenuCommand.new menu, "Tile &Horizontally", nil, @fmdiclient, FXMDIClient::ID_MDI_TILEHORIZONTAL
+      FXMenuCommand.new menu, "Tile &Vertically", nil, @fmdiclient, FXMDIClient::ID_MDI_TILEVERTICAL
+      FXMenuCommand.new menu, "C&ascada", nil, @fmdiclient, FXMDIClient::ID_MDI_CASCADE
+      FXMenuCommand.new menu, "&Cerrar", nil, @fmdiclient, FXMDIClient::ID_MDI_CLOSE
 
       FXMenuTitle.new @fmenubar, '&Ventanas', nil, menu
     end
@@ -77,7 +82,7 @@ module GUI
     end
     
     def create_mdi_childs
-      @children[:welcome] = WVetWindow.new @fmdiclient, self, 225, 0, 350, 350
+      @children[:welcome] = WVetWindow.new @fmdiclient, self, 225, 0, 350, 450
       @children[:appointments] = WAppointment_List.new @fmdiclient
       @children[:stock] = WStock.new @fmdiclient, 'Stock', nil, nil, 0, 10, 10, 700, 500
       @children[:purchase] = WPurchase.new @fmdiclient, 'Compra', nil, nil, 0, 10, 10, 700, 500
