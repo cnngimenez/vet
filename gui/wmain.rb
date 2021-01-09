@@ -22,6 +22,7 @@ require_relative 'wappointment_list'
 require_relative 'inventory/wstock'
 require_relative 'inventory/wpurchase'
 require_relative 'inventory/wsell'
+require_relative 'wabout'
 
 # User interface module.
 module GUI
@@ -74,6 +75,7 @@ module GUI
       @mstock = WStock.new @fmdiclient, 'Stock', nil, nil, 0, 10, 10, 700, 500
       @mpurchase = WPurchase.new @fmdiclient, 'Compra', nil, nil, 0, 10, 10, 700, 500
       @msell = WSell.new @fmdiclient, 'Venta', nil, nil, 0, 10, 10, 700, 500
+      @mabout = WAbout.new @fmdiclient, 10, 0, 500, 500
       
       @mstock.hide
       @msell.hide
