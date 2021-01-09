@@ -24,3 +24,4 @@ The sites used to obtain the images claims to publish their images under the Pub
 
  - cat1.svg Public Domain. https://freesvg.org/outline-vector-image-of-cat
  - dog2.svg Public Domain. https://freesvg.org/happy-running-puppy-vector-image
+ - tips_and_tricks.svg Public Domain. https://freesvg.org/tips-and-tricks

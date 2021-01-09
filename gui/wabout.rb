@@ -25,24 +25,24 @@ module GUI
   include Fox
   # The about window.
   class WAbout < FXMDIChild
-    PROJECT_TEXT = <<~EOM
-            Christian Gimenez (https://github.com/cnngimenez).
+    PROJECT_TEXT = <<~MESSAGE
+      Christian Gimenez (https://github.com/cnngimenez).
 
-            Los siguientes enlaces que pueden resultarle útil para consultar la documentación del software:
+      Los siguientes enlaces que pueden resultarle útil para consultar la documentación del software:
 
-            - Código fuente: https://github.com/cnngimenez/vet
-            - Reportar errores y sugerencias: https://github.com/cnngimenez/vet/issues
-            - Wiki y documentación de ayuda del proyecto: https://github.com/cnngimenez/vet/wiki
-    EOM
+      - Código fuente: https://github.com/cnngimenez/vet
+      - Reportar errores y sugerencias: https://github.com/cnngimenez/vet/issues
+      - Wiki y documentación de ayuda del proyecto: https://github.com/cnngimenez/vet/wiki
+    MESSAGE
 
-    LICENSE_TEXT = <<~EOM
-            Este programa está bajo la licencia GNU General Public License versión 3 (GPLv3).
-            Puede leer el archivo LICENSE o visite la siguiente página Web para más información: https://www.gnu.org/licenses/gpl-3.0.html
+    LICENSE_TEXT = <<~LICENSE
+      Este programa está bajo la licencia GNU General Public License versión 3 (GPLv3).
+      Puede leer el archivo LICENSE o visite la siguiente página Web para más información: https://www.gnu.org/licenses/gpl-3.0.html
 
-            Este proyecto es Software Libre ( https://fsf.org ).
+      Este proyecto es Software Libre ( https://fsf.org ).
 
-            Las licencias de las imágenes se encuentra en el directorio gui/imgs/Readme.org del proyecto. Se intentaron buscar imágenes basadas en las licencias Creative Commons ( https://creativecommons.org ) o de Dominio Público.
-    EOM
+      Las licencias de las imágenes se encuentra en el directorio gui/imgs/Readme.org del proyecto. Se intentaron buscar imágenes basadas en las licencias Creative Commons ( https://creativecommons.org ) o de Dominio Público.
+    LICENSE
     def initialize(mdiclient, x = 10, y = 10, width = 400, height = 400)
       super mdiclient, 'Ayuda y soporte', nil, nil, 0, x, y, width, height
 
