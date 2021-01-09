@@ -22,8 +22,9 @@ module GUI
   include Fox
   # A Welcome Window
   class WVetWindow < FXMDIChild
-    def initialize(mdiclient, x = 0, y = 0, width = 500, height = 500)
+    def initialize(mdiclient, wmain, x = 0, y = 0, width = 500, height = 500)
       super mdiclient, 'Vet', nil, nil, 0, x, y, width, height
+      @wmain = wmain
 
       @f1 = FXVerticalFrame.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
       @f2 = FXHorizontalFrame.new @f1, opts: LAYOUT_FILL_X
@@ -35,8 +36,9 @@ module GUI
       font = FXFont.new getApp, 'courier', 25, FONTWEIGHT_BOLD
       @lblwelcome.font = font
 
+      @btnappointments = FXButton.new @f1, 'Turnos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
       @btnstock = FXButton.new @f1, 'Stock de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
-      @btnstock = FXButton.new @f1, 'Compra de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
+      @btnpurchase = FXButton.new @f1, 'Compra de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
       @btnsell = FXButton.new @f1, 'Venta de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
 
       assign_handlers
@@ -45,14 +47,17 @@ module GUI
     private
 
     def assign_handlers
-      @btnstock.connect SEL_COMMAND do |_sender, _sel, _data|
-        @wstock.show
+      @btnappointments.connect SEL_COMMAND do |_sender, _sel, _data|
+        @wmain.show_child :appointments
       end
       @btnstock.connect SEL_COMMAND do |_sender, _sel, _data|
-        @wpurchase.show
+        @wmain.show_child :stock
+      end
+      @btnpurchase.connect SEL_COMMAND do |_sender, _sel, _data|
+        @wmain.show_child :purchase
       end
       @btnsell.connect SEL_COMMAND do |_sender, _sel, _data|
-        @wsell.show
+        @wmain.show_child :sell
       end
       connect SEL_CLOSE do
         hide

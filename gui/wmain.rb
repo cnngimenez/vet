@@ -32,6 +32,7 @@ module GUI
     def initialize(app)
       super app, 'Vet', opts: DECOR_ALL, x: 0, y: 0, width: 800, height: 600
 
+      @children = {}
       @fmenubar = FXMenuBar.new self, LAYOUT_SIDE_TOP | LAYOUT_FILL_X
       @fstatusbar = FXStatusBar.new self, LAYOUT_SIDE_BOTTOM | LAYOUT_FILL_X | STATUSBAR_WITH_DRAGCORNER
       @fmdiclient = FXMDIClient.new self, LAYOUT_FILL_X | LAYOUT_FILL_Y
@@ -42,6 +43,12 @@ module GUI
       create_mdi_childs
     end
 
+    def show_child(child)
+      return unless @children.member? child
+
+      @children[child].show
+    end
+    
     private
     
     def create_window_menu
@@ -53,9 +60,9 @@ module GUI
       cmd = FXMenuCommand.new menu, '&Stock'
       cmd.connect SEL_COMMAND, method(:on_stock_clicked)
       cmd = FXMenuCommand.new menu, '&Compra'
-      cmd.connect SEL_COMMAND, method(:on_compra_clicked)
+      cmd.connect SEL_COMMAND, method(:on_purchase_clicked)
       cmd = FXMenuCommand.new menu, '&Venta'
-      cmd.connect SEL_COMMAND, method(:on_venta_clicked)
+      cmd.connect SEL_COMMAND, method(:on_sell_clicked)
 
       FXMenuTitle.new @fmenubar, '&Ventanas', nil, menu
     end
@@ -70,33 +77,35 @@ module GUI
     end
     
     def create_mdi_childs
-      @mwelcome = WVetWindow.new @fmdiclient, 225, 0, 350, 350
-      @mappointments = WAppointment_List.new @fmdiclient
-      @mstock = WStock.new @fmdiclient, 'Stock', nil, nil, 0, 10, 10, 700, 500
-      @mpurchase = WPurchase.new @fmdiclient, 'Compra', nil, nil, 0, 10, 10, 700, 500
-      @msell = WSell.new @fmdiclient, 'Venta', nil, nil, 0, 10, 10, 700, 500
-      @mabout = WAbout.new @fmdiclient, 10, 0, 500, 500
-      
-      @mstock.hide
-      @msell.hide
-      @mpurchase.hide
-      @fmdiclient.setActiveChild @mwelcome
+      @children[:welcome] = WVetWindow.new @fmdiclient, self, 225, 0, 350, 350
+      @children[:appointments] = WAppointment_List.new @fmdiclient
+      @children[:stock] = WStock.new @fmdiclient, 'Stock', nil, nil, 0, 10, 10, 700, 500
+      @children[:purchase] = WPurchase.new @fmdiclient, 'Compra', nil, nil, 0, 10, 10, 700, 500
+      @children[:sell] = WSell.new @fmdiclient, 'Venta', nil, nil, 0, 10, 10, 700, 500
+      @children[:about] = WAbout.new @fmdiclient, 10, 0, 500, 500
+
+      @children.each do |_name, child|
+        child.hide
+      end
+
+      @children[:welcome].show
+      @fmdiclient.setActiveChild @children[:welcome]
     end
 
     def on_bienvenida_clicked(_sender, _sel, _ptr)
-      @mwelcome.show
+      show_child :welcome
     end
     def on_turnos_clicked(_sender, _sel, _ptr)
-      @mappointments.show
+      show_child :appointments
     end
     def on_stock_clicked(_sender, _sel, _ptr)
-      @mstock.show
+      show_child :stock
     end
-    def on_compra_clicked(_sender, _sel, _ptr)
-      @mpurchase.show
+    def on_purchase_clicked(_sender, _sel, _ptr)
+      show_child :purchase
     end
-    def on_venta_clicked(_sender, _sel, _ptr)
-      @msell.show
+    def on_sell_clicked(_sender, _sel, _ptr)
+      show_child :sell
     end
     
   end
