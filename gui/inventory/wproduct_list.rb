@@ -33,10 +33,11 @@ module GUI
       super(...)
 
       @fmain = FXVerticalFrame.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
-
+     
       @ftop = FXHorizontalFrame.new @fmain, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
       @wpf = WProductFilter.new @ftop, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
       @fright = FXVerticalFrame.new @ftop
+      @ftips = FXVerticalFrame.new @ftop
 
       connect SEL_CLOSE do |_sender, _sel, _data|
         self.visible = FALSE
