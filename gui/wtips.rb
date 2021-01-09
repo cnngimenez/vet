@@ -33,10 +33,41 @@ module GUI
       f1 = FXVerticalFrame.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
       @txt = FXText.new f1, nil, 0, TEXT_READONLY | TEXT_WORDWRAP | LAYOUT_FILL_X | LAYOUT_FILL_Y
 
+      create_styles
       load_tips
     end
 
     protected
+
+    def create_styles
+      # Bold
+      bold = FXHiliteStyle.from_text(@txt)
+      bold.style = FXText::STYLE_BOLD
+      # H1
+      h1 = FXHiliteStyle.from_text(@txt)
+      h1.normalBackColor = FXColor::LightBlue
+      h1.style = FXText::STYLE_UNDERLINE
+
+      @txt.styled = true
+      @txt.hiliteStyles = [h1, bold]
+    end
+
+    H1REGEXP = /^#[ ]+(.*)$/
+    BOLDREGEXP = /\*\*(.*)\*\*/
+
+    def apply_styles
+      str = @txt.text
+      matches = str.to_enum(:scan, H1REGEXP).map { Regexp.last_match }
+      matches.each do |match|
+        pos = @txt.findText match[0]
+        @txt.changeStyle(pos.first[0], match[0].length, 1)
+      end
+      matches = str.to_enum(:scan, BOLDREGEXP).map { Regexp.last_match }
+      matches.each do |match|
+        pos = @txt.findText match[0]
+        @txt.changeStyle pos.first[0], match[0].length, 2
+      end
+    end
 
     def tip_filepath
       "gui/tips/#{@tip_name}.md"
@@ -46,6 +77,7 @@ module GUI
       return unless File.exist? tip_filepath
 
       @txt.text = File.read tip_filepath
+      apply_styles
     end
   end
 end

@@ -12,7 +12,7 @@ Si necesita cargar muchos productos, se puede hacer de la siguiente manera:
 En pocas palabras, la regla a recordar es: "Presionar ENTER para pasar al próximo campo".
 
 # Editar un producto
-Al hacer doble clic en la lista de stock se habilitará la edición de ese producto.
+Al hacer doble clic en la lista de stock **se habilitará la edición de** ese producto.
 
 Podrá observar los siguientes cambios:
 
