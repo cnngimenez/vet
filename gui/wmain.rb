@@ -19,6 +19,7 @@
 
 require 'fox16'
 require_relative 'wappointment_list'
+require_relative 'exporter/csv_export'
 require_relative 'inventory/wstock'
 require_relative 'inventory/wpurchase'
 require_relative 'inventory/wsell'
@@ -33,13 +34,17 @@ module GUI
       super app, 'Vet', opts: DECOR_ALL, x: 0, y: 0, width: 800, height: 600
 
       @children = {}
+      @csv_exporter = CSVExporter.new app, 'Exportar a CSV', opts: DECOR_ALL,
+                                                             x: 20, y: 20,
+                                                             width: 450, height: 200
+
       @fmenubar = FXMenuBar.new self, LAYOUT_SIDE_TOP | LAYOUT_FILL_X
       @fstatusbar = FXStatusBar.new self, LAYOUT_SIDE_BOTTOM | LAYOUT_FILL_X | STATUSBAR_WITH_DRAGCORNER
       @fmdiclient = FXMDIClient.new self, LAYOUT_FILL_X | LAYOUT_FILL_Y
 
       create_mdi_menu
       create_window_menu
-     
+
       create_mdi_childs
     end
 
@@ -48,9 +53,9 @@ module GUI
 
       @children[child].show
     end
-    
+
     private
-    
+
     def create_window_menu
       menu = FXMenuPane.new self
       cmd = FXMenuCommand.new menu, '&Bienvenida'
@@ -63,24 +68,31 @@ module GUI
       cmd.connect SEL_COMMAND, method(:on_purchase_clicked)
       cmd = FXMenuCommand.new menu, '&Venta'
       cmd.connect SEL_COMMAND, method(:on_sell_clicked)
-      FXMenuSeparator.new menu     
-      FXMenuCommand.new menu, "Tile &Horizontally", nil, @fmdiclient, FXMDIClient::ID_MDI_TILEHORIZONTAL
-      FXMenuCommand.new menu, "Tile &Vertically", nil, @fmdiclient, FXMDIClient::ID_MDI_TILEVERTICAL
-      FXMenuCommand.new menu, "C&ascada", nil, @fmdiclient, FXMDIClient::ID_MDI_CASCADE
-      FXMenuCommand.new menu, "&Cerrar", nil, @fmdiclient, FXMDIClient::ID_MDI_CLOSE
+      FXMenuSeparator.new menu
+      FXMenuCommand.new menu, 'Tile &Horizontally', nil, @fmdiclient, FXMDIClient::ID_MDI_TILEHORIZONTAL
+      FXMenuCommand.new menu, 'Tile &Vertically', nil, @fmdiclient, FXMDIClient::ID_MDI_TILEVERTICAL
+      FXMenuCommand.new menu, 'C&ascada', nil, @fmdiclient, FXMDIClient::ID_MDI_CASCADE
+      FXMenuCommand.new menu, '&Cerrar', nil, @fmdiclient, FXMDIClient::ID_MDI_CLOSE
 
       FXMenuTitle.new @fmenubar, '&Ventanas', nil, menu
+
+      # Export menu
+      menu = FXMenuPane.new self
+      cmd = FXMenuCommand.new menu, '&Exportar a CSV'
+      cmd.connect SEL_COMMAND, method(:on_csv_clicked)
+
+      FXMenuTitle.new @fmenubar, '&Exportar', nil, menu
     end
 
     def create_mdi_menu
       @fmdimenu = FXMDIMenu.new self, @fmdiclient
       FXMDIWindowButton.new @fmenubar, @fmdimenu, @fmdiclient, FXMDIClient::ID_MDI_MENUWINDOW, LAYOUT_LEFT
-      
+
       FXMDIDeleteButton.new @fmenubar, @fmdiclient, FXMDIClient::ID_MDI_MENUCLOSE, FRAME_RAISED | LAYOUT_RIGHT
       FXMDIRestoreButton.new @fmenubar, @fmdiclient, FXMDIClient::ID_MDI_MENURESTORE, FRAME_RAISED | LAYOUT_RIGHT
       FXMDIMinimizeButton.new @fmenubar, @fmdiclient, FXMDIClient::ID_MDI_MENUMINIMIZE, FRAME_RAISED | LAYOUT_RIGHT
     end
-    
+
     def create_mdi_childs
       @children[:welcome] = WVetWindow.new @fmdiclient, self, 225, 0, 350, 450
       @children[:appointments] = WAppointment_List.new @fmdiclient
@@ -100,18 +112,25 @@ module GUI
     def on_bienvenida_clicked(_sender, _sel, _ptr)
       show_child :welcome
     end
+
     def on_turnos_clicked(_sender, _sel, _ptr)
       show_child :appointments
     end
+
     def on_stock_clicked(_sender, _sel, _ptr)
       show_child :stock
     end
+
     def on_purchase_clicked(_sender, _sel, _ptr)
       show_child :purchase
     end
+
     def on_sell_clicked(_sender, _sel, _ptr)
       show_child :sell
     end
-    
+
+    def on_csv_clicked(_sender, _sel, _ptr)
+      @csv_exporter.show
+    end
   end
 end
