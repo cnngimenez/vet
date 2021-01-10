@@ -1,4 +1,3 @@
-# coding: utf-8
 # Copyright 2020 Christian Gimenez
 #
 # inventory.rb
@@ -45,6 +44,17 @@ module Models
 
     def to_s
       "#{name} (#{code}) $#{unitary_cost} #{stock}u"
+    end
+
+    # @return [Array] An array of strings.
+    def to_csv_array
+      [code, name, unitary_cost, stock]
+    end
+
+    class << self
+      def csv_header
+        %w[code name unitary_cost stock]
+      end
     end
   end
 
