@@ -46,6 +46,7 @@ module GUI
       create_window_menu
 
       create_mdi_childs
+      assign_handlers
     end
 
     def show_child(child)
@@ -56,7 +57,21 @@ module GUI
 
     private
 
+    def assign_handlers
+      connect SEL_CLOSE do
+        getApp.exit
+      end
+    end
+
     def create_window_menu
+      # Program menu
+      menu = FXMenuPane.new self
+      cmd = FXMenuCommand.new menu, '&Salir'
+      cmd.connect SEL_COMMAND, method(:on_exit_clicked)
+
+      FXMenuTitle.new @fmenubar, '&Programa', nil, menu
+
+      # Window menu
       menu = FXMenuPane.new self
       cmd = FXMenuCommand.new menu, '&Bienvenida'
       cmd.connect SEL_COMMAND, method(:on_bienvenida_clicked)
@@ -131,6 +146,10 @@ module GUI
 
     def on_csv_clicked(_sender, _sel, _ptr)
       @csv_exporter.show
+    end
+
+    def on_exit_clicked(_sender, _sel, _ptr)
+      getApp.exit
     end
   end
 end
