@@ -1,3 +1,4 @@
+# coding: utf-8
 # Copyright 2021 Christian Gimenez
 #
 # csv_export.rb
@@ -18,9 +19,15 @@
 # frozen_string_literal: true
 
 require 'fox16'
+require_relative '../../exporters'
 
+# User Interface module
 module GUI
   include Fox
+  include Exporters
+  # The CSV Exporter Window
+  #
+  # Show export options to the user.
   class CSVExporter < FXMainWindow
     def initialize(...)
       super(...)
@@ -41,18 +48,54 @@ module GUI
       getApp.runModalFor self
     end
 
+    def hide
+      getApp.stopModal
+      super
+    end
+
     private
 
     def on_btnfile_clicked(...)
       filepath = FXFileDialog.getSaveFilename self, 'Archivo CSV a Exportar', '~/',
-                                              patterns = "Archivos CSV (*.csv)\nTodos los archivos (*)"
-      @txtsave.text = filepath unless filepath.nil?
+                                              "Archivos CSV (*.csv)\nTodos los archivos (*)"
+
+      return if filepath.nil?
+
+      filepath += '.csv' unless filepath.end_with? '.csv'
+      @txtsave.text = filepath
+    end
+
+    def do_save
+      puts "Writing #{@txtsave.text} CSV file."
+      exporter = CSVExporters::ProductExporter.new
+      exporter.to_file @txtsave.text
+    end
+
+    def on_btnsave_clicked(...)
+      return if @txtsave.text.empty?
+
+      if File.exist? @txtsave.text
+        yesno = FXMessageBox.question self,
+                                      MBOX_YES_NO_CANCEL,
+                                      '¿Sobreescribir archivo?',
+                                      "El archivo #{@txtsave.text} ya existe. ¿Desea sobreescribirlo?"
+        case yesno
+        when MBOX_CLICKED_YES
+          do_save
+        when MBOX_CLICKED_NO
+          return
+        end
+      else
+        do_save
+      end
+
+      hide
     end
 
     def assign_handlers
       @btnfile.connect SEL_COMMAND, method(:on_btnfile_clicked)
+      @btnsave.connect SEL_COMMAND, method(:on_btnsave_clicked)
       connect SEL_CLOSE do
-        getApp.stopModal
         hide
         1 # do not delete the window!
       end
