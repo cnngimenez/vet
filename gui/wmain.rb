@@ -19,7 +19,8 @@
 
 require 'fox16'
 require_relative 'wappointment_list'
-require_relative 'exporter/csv_export'
+require_relative 'exporter/csv_product_exporter'
+require_relative 'exporter/csv_sells_exporter'
 require_relative 'inventory/wstock'
 require_relative 'inventory/wpurchase'
 require_relative 'inventory/wsell'
@@ -34,9 +35,14 @@ module GUI
       super app, 'Vet', opts: DECOR_ALL, x: 0, y: 0, width: 800, height: 600
 
       @children = {}
-      @csv_exporter = CSVExporter.new app, 'Exportar a CSV', opts: DECOR_ALL,
-                                                             x: 20, y: 20,
-                                                             width: 450, height: 200
+      @csv_products_exporter = Exporters::CSVProductExporter.new app, 'Exportar Productos a CSV',
+                                                                 opts: DECOR_ALL,
+                                                                 x: 20, y: 20,
+                                                                 width: 450, height: 200
+      @csv_sells_exporter = Exporters::CSVSellsExporter.new app, 'Exportar Ventas a CSV',
+                                                            opts: DECOR_ALL,
+                                                            x: 20, y: 20,
+                                                            width: 550, height: 450
 
       @fmenubar = FXMenuBar.new self, LAYOUT_SIDE_TOP | LAYOUT_FILL_X
       @fstatusbar = FXStatusBar.new self, LAYOUT_SIDE_BOTTOM | LAYOUT_FILL_X | STATUSBAR_WITH_DRAGCORNER
@@ -93,9 +99,11 @@ module GUI
 
       # Export menu
       menu = FXMenuPane.new self
-      cmd = FXMenuCommand.new menu, '&Exportar a CSV'
-      cmd.connect SEL_COMMAND, method(:on_csv_clicked)
-
+      cmd = FXMenuCommand.new menu, '&Exportar Productos a CSV'
+      cmd.connect SEL_COMMAND, method(:on_csv_products_clicked)
+      cmd = FXMenuCommand.new menu, '&Exportar Ventas a CSV'
+      cmd.connect SEL_COMMAND, method(:on_csv_sells_clicked)
+      
       FXMenuTitle.new @fmenubar, '&Exportar', nil, menu
     end
 
@@ -144,8 +152,12 @@ module GUI
       show_child :sell
     end
 
-    def on_csv_clicked(_sender, _sel, _ptr)
-      @csv_exporter.show
+    def on_csv_products_clicked(_sender, _sel, _ptr)
+      @csv_products_exporter.show
+    end
+
+    def on_csv_sells_clicked(_sender, _sel, _ptr)
+      @csv_sells_exporter.show
     end
 
     def on_exit_clicked(_sender, _sel, _ptr)

@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# frozen_string_literal: true
+
 require 'csv'
 require_relative '../models'
 
@@ -24,11 +26,11 @@ module Exporters
   module CSVExporters
     include Models
 
-    # Export the sells
+    # Export Product instances to a CSV file.
     class ProductExporter
       def initialize; end
 
-      def to_file(filepath)        
+      def to_file(filepath)
         lst = Product.all
         CSV.open filepath, 'w' do |csv|
           csv << Product.csv_header
@@ -39,18 +41,21 @@ module Exporters
       end
     end
 
-    # Export the sells
-    class SellsExporter
+    # Export the Sell instances to a CSV file.
+    class SellExporter
+      # Initialize the new instance.
+      #
+      # @param from_date [Time]
+      # @param to_date [Time]
       def initialize(from_date, to_date)
-        @date_range = { from: from_date,
-                        to: to_date }
+        @date_range = { from: from_date, to: to_date }
       end
 
       # Is the date range too much?
+      #
       # @return [Boolean] true if it is too much, false if it is alright.
       def too_much_time?
-        # 5184000 is 60 months in seconds.
-        @date_range[:to] - @date_range[:from] > 5_184_000
+        SellExporter.too_much_time? @data_range[:from], @data_range[:to]
       end
 
       def to_file(filepath)
@@ -60,9 +65,19 @@ module Exporters
 
         CSV.open filepath, 'w' do |csv|
           csv << Sell.get_csv_header
-          lst.each do |product|
-            csv << product.to_csv_array
+          lst.each do |sell|
+            csv << sell.to_csv_array
           end
+        end
+      end
+
+      class << self
+        # Is the date range too much?
+        #
+        # @return [Boolean] true if it is too much, false if it is alright.
+        def too_much_time?(from, to)
+          # 5184000 is 60 months in seconds.
+          to - from > 5_184_000
         end
       end
     end

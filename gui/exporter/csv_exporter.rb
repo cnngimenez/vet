@@ -32,15 +32,19 @@ module GUI
     def initialize(...)
       super(...)
 
-      f1 = FXVerticalFrame.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
+      @ftop = FXVerticalFrame.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
 
-      f2 = FXHorizontalFrame.new f1, opts: LAYOUT_FILL_X
-      @txtsave = FXTextField.new f2, 50, opts: LAYOUT_FILL_X | TEXTFIELD_NORMAL | TEXTFIELD_READONLY
-      @btnfile = FXButton.new f2, 'Seleccionar archivo'
+      filegroup = FXGroupBox.new @ftop, 'Archivo a exportar', GROUPBOX_NORMAL | FRAME_NORMAL | LAYOUT_FILL_X
+      @ffile = FXHorizontalFrame.new filegroup, opts: LAYOUT_FILL_X
+      @txtsave = FXTextField.new @ffile, 50, opts: LAYOUT_FILL_X | TEXTFIELD_NORMAL | TEXTFIELD_READONLY
+      @btnfile = FXButton.new @ffile, 'Seleccionar archivo'
 
-      @btnsave = FXButton.new f1, 'Exportar'
+      optionsgroup = FXGroupBox.new @ftop, 'Opciones',  GROUPBOX_NORMAL | FRAME_NORMAL |
+                                                        LAYOUT_FILL_X | LAYOUT_FILL_Y
 
-      assign_handlers
+      @foptions = FXVerticalFrame.new optionsgroup, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
+
+      @btnsave = FXButton.new @ftop, 'Exportar'
     end
 
     def show
@@ -52,9 +56,22 @@ module GUI
       getApp.stopModal
       super
     end
+   
+    protected
 
-    private
+    def update_widgets; end
+    
+    # Execute the export and save the file.
+    #
+    # Overwrite the file if it already exists.
+    #
+    # # Subclass
+    # Redefine this method completely in subclass. Do not call super.
+    def do_save
+      raise "Redefine this method in subclass"
+    end
 
+    
     def on_btnfile_clicked(...)
       filepath = FXFileDialog.getSaveFilename self, 'Archivo CSV a Exportar', '~/',
                                               "Archivos CSV (*.csv)\nTodos los archivos (*)"
@@ -63,12 +80,6 @@ module GUI
 
       filepath += '.csv' unless filepath.end_with? '.csv'
       @txtsave.text = filepath
-    end
-
-    def do_save
-      puts "Writing #{@txtsave.text} CSV file."
-      exporter = CSVExporters::ProductExporter.new
-      exporter.to_file @txtsave.text
     end
 
     def on_btnsave_clicked(...)
@@ -92,6 +103,9 @@ module GUI
       hide
     end
 
+    # Assign handlers to events.
+    #
+    # Call #super if redefined in subclass.
     def assign_handlers
       @btnfile.connect SEL_COMMAND, method(:on_btnfile_clicked)
       @btnsave.connect SEL_COMMAND, method(:on_btnsave_clicked)
