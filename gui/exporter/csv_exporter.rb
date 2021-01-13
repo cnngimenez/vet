@@ -53,6 +53,7 @@ module GUI
     end
 
     def hide
+      puts "Stop modal"
       getApp.stopModal
       super
     end
