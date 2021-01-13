@@ -51,6 +51,8 @@ module GUI
       @wap = WAppointment.new fx1, 'Nuevo Turno', opts: LAYOUT_FILL_X | LAYOUT_FILL_Y | FRAME_NORMAL
       @fxbtn = FXButton.new fx1, 'Nuevo Turno', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
 
+      WTipButton.new fxh1, mdiclient, 'wappointment_list'
+      
       assign_handlers
       set_date Time.now # Also calls update_widgets
     end
