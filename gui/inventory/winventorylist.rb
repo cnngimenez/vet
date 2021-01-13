@@ -41,7 +41,6 @@ module GUI
     
     # @param date [Time]
     def set_date (date)
-      puts "date"
       @date = date
       @lstobjs = from_date @date
       update_widgets
@@ -57,7 +56,6 @@ module GUI
     end
     
     def update_widgets
-      puts "WInventoryList#update_widgets"
       @flbl_cal.text = "Fecha a mostrar: #{@date.strftime '%D'}"
 
       @flist.clearItems

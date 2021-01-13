@@ -23,6 +23,8 @@ require_relative 'exporter'
 require_relative 'inventory/wstock'
 require_relative 'inventory/wpurchase'
 require_relative 'inventory/wsell'
+require_relative 'inventory/wsellslist'
+require_relative 'inventory/wpurchaseslist'
 require_relative 'wabout'
 
 # User interface module.
@@ -92,6 +94,10 @@ module GUI
       cmd.connect SEL_COMMAND, method(:on_purchase_clicked)
       cmd = FXMenuCommand.new menu, '&Venta'
       cmd.connect SEL_COMMAND, method(:on_sell_clicked)
+      cmd = FXMenuCommand.new menu, '&Listar Ventas'
+      cmd.connect SEL_COMMAND, method(:on_sellslist_clicked)
+      cmd = FXMenuCommand.new menu, '&Listar Comprados'
+      cmd.connect SEL_COMMAND, method(:on_purchaseslist_clicked)
       FXMenuSeparator.new menu
       FXMenuCommand.new menu, 'Tile &Horizontally', nil, @fmdiclient, FXMDIClient::ID_MDI_TILEHORIZONTAL
       FXMenuCommand.new menu, 'Tile &Vertically', nil, @fmdiclient, FXMDIClient::ID_MDI_TILEVERTICAL
@@ -128,6 +134,8 @@ module GUI
       @children[:purchase] = WPurchase.new @fmdiclient, 'Compra', nil, nil, 0, 10, 10, 700, 500
       @children[:sell] = WSell.new @fmdiclient, 'Venta', nil, nil, 0, 10, 10, 700, 500
       @children[:about] = WAbout.new @fmdiclient, 10, 0, 500, 500
+      @children[:sellslist] = WSellsList.new @fmdiclient, 'Lista de ventas', nil, nil, 0, 10, 10, 700, 500
+      @children[:purchaseslist] = WPurchasesList.new @fmdiclient, 'Lista de comprados', nil, nil, 0, 10, 10, 700, 500
 
       @children.each do |_name, child|
         child.hide
@@ -153,8 +161,16 @@ module GUI
       show_child :purchase
     end
 
+    def on_purchaseslist_clicked(_sender, _sel, _ptr)
+      show_child :purchaseslist
+    end
+
     def on_sell_clicked(_sender, _sel, _ptr)
       show_child :sell
+    end
+
+    def on_sellslist_clicked(_sender, _sel, _ptr)
+      show_child :sellslist
     end
 
     def on_csv_products_clicked(_sender, _sel, _ptr)
