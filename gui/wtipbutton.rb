@@ -23,16 +23,26 @@ require_relative 'wtips'
 module GUI
   include Fox
   class WTipButton < FXButton
-    def initialize(parent, mdiclient, tip_name, icon='tips_and_tricks')
+    ICONS = %w[cool FYI side_note take_note tips_and_tricks]
+
+    def initialize(parent, mdiclient, tip_name, icon = nil)
       super parent, ''
-      self.icon = load_icon icon
+      self.icon = if icon.nil?
+                    load_random_icon
+                  else
+                    load_icon icon
+                  end
 
       @mdiclient = mdiclient
       @tip_name = tip_name
 
       connect SEL_COMMAND, method(:on_clicked)
     end
-    
+
+    def load_random_icon
+      load_icon ICONS[rand 0..(ICONS.count - 1)]
+    end
+
     def load_icon(name)
       filename = File.expand_path("../imgs/#{name}.png", __FILE__)
       File.open(filename, 'rb') do |f|
@@ -47,6 +57,5 @@ module GUI
       w.create
       @mdiclient.setActiveChild w
     end
-
   end
 end
