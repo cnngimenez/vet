@@ -68,6 +68,7 @@ module GUI
       @fbtns[:license_file] = FXButton.new f2, 'Abrir archivo LICENSE'
 
       FXLabel.new f1, "Ubicación de la aplicación: #{Dir.pwd}"
+      FXLabel.new f1, "Ubicación de la base de datos: #{Dir.pwd}/database.sqlite3"
       @fbtns[:install_dir] = FXButton.new f1, 'Abrir ubicación'
 
       assign_handlers

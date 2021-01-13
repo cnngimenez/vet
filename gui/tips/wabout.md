@@ -16,7 +16,7 @@ Para más información, puede visitar la página de la Free Software Foundation 
 # ¿Cómo hacer una copia de Respaldo de la Base de Datos?
 La Base de Datos de la aplicación es el archivo donde se encuentra toda la información que usted ingresó. En otras palabras, es un archivo que tiene un formato especial (técnicamente SQLite) y que adentro de él se encuentra la información del stock y los turnos.
 
-Realizar una copia de respaldo es copiar el archivo db.sqlite3 que se encuentra en el directorio de la aplicación (la carpeta donde instaló Vet). Si usted no sabe dónde se encuentra esta carpeta, en el menú *Ventanas* > *Información y Soporte* abrirá una ventana nueva. Al final, se muestra la ubicación y puede hacer clic en "Abrir Ubicación" para que el explorador de archivos de su sistema muestre ese directorio.
+Realizar una copia de respaldo es copiar el archivo database.sqlite3  que se encuentra en el directorio de la aplicación (la carpeta donde instaló Vet). Obsérvese que en ciertos sistemas le mostrará el nombre del archivo sin la extensión, en este caso, el explorador de archivos le mostrará "database" (sin la extensión ".sqlite3"). Si usted no sabe dónde se encuentra esta carpeta, en el menú *Ventanas* > *Información y Soporte* abrirá una ventana nueva. Al final, se muestra la ubicación y puede hacer clic en "Abrir Ubicación" para que el explorador de archivos de su sistema muestre ese directorio.
 
 Al realizar una copia de respaldo, considere lo siguiente:
 
@@ -33,5 +33,5 @@ En resumen, los pasos habituales son los siguientes:
 - Dirígase al menú *Ventanas* y luego *Información y Soporte*.
 - Haga clic en *Abrir Ubicación*.
 - Cierre la aplicación Vet completamente (Clic en el menú *Programa* y luego *Salir*).
-- Copie el archivo *db.sqlite3* a otra ubicación. Puede ser sus documentos o el escritorio, pero recomendamos que lo copie a un pendrive o un disco portátil. 
+- Copie el archivo llamado *database.sqlite3* (ó *database* en ciertos sistemas operativos) a otra ubicación. Puede ser sus documentos o el escritorio, pero recomendamos que lo copie a un pendrive o un disco portátil. 
 - Cambie el nombre de la nueva copia a "db-FECHA_ACTUAL.sqlite3", donde "FECHA_ACTUAL" es la fecha del día de hoy.
