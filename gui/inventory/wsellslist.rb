@@ -21,13 +21,15 @@ require_relative '../../models'
 require_relative 'winventorylist'
 
 module GUI
-  include Models
-  # List all Sell instances (sold items) filtered by a particular date.
-  class WSellsList < WInventoryList
-    protected
-    
-    def from_date(date)
-      Sell.between_dates  from: date, to: date + 1.day
+  module Inventory
+    include Models
+    # List all Sell instances (sold items) filtered by a particular date.
+    class WSellsList < WInventoryList
+      protected
+      
+      def from_date(date)
+        Sell.between_dates  from: date, to: date + 1.day
+      end
     end
   end
 end

@@ -24,23 +24,25 @@ require_relative 'wbill'
 
 # User interface module
 module GUI
-  include Fox
-  include Models
+  module Inventory
+    include Fox
+    include Models
 
-  # Purchase window
-  #
-  # Show a bill-like window to fill with purchases.
-  class WPurchase < WBill
-    def initialize(...)
-      super(...)
+    # Purchase window
+    #
+    # Show a bill-like window to fill with purchases.
+    class WPurchase < WBill
+      def initialize(...)
+        super(...)
 
-      @btnaction.text = 'Comprar'
-    end
+        @btnaction.text = 'Comprar'
+      end
 
-    protected
+      protected
 
-    def create_obj(data)
-      Purchase.create data
+      def create_obj(data)
+        Purchase.create data
+      end
     end
   end
 end

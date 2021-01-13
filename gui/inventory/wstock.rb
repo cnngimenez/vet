@@ -25,90 +25,92 @@ require_relative '../wtipbutton'
 
 # User interface module
 module GUI
-  include Fox
-  include Models
+  module Inventory
+    include Fox
+    include Models
 
-  # The Stock Window
-  #
-  # Display and manage the stocked products.
-  class WStock < WProductList
-    def initialize(...)
-      super(...)
+    # The Stock Window
+    #
+    # Display and manage the stocked products.
+    class WStock < WProductList
+      def initialize(...)
+        super(...)
 
-      WTipButton.new @ftips, self.parent, 'wstock'
-      @wproduct = WProduct.new @fright, 'Producto', opts: FRAME_NORMAL | LAYOUT_FILL_X
-      @btnnew = FXButton.new @fright, 'Nuevo producto', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
-      @lblpurchased = FXLabel.new @fright, 'Últimas 10 compras a vendedor:'
-      @lstpurchased = FXList.new @fright, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
-      @lblsold = FXLabel.new @fright, 'Últimas 10 ventas a clientes:'
-      @lstsold = FXList.new @fright, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
+        WTipButton.new @ftips, self.parent, 'wstock'
+        @wproduct = WProduct.new @fright, 'Producto', opts: FRAME_NORMAL | LAYOUT_FILL_X
+        @btnnew = FXButton.new @fright, 'Nuevo producto', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
+        @lblpurchased = FXLabel.new @fright, 'Últimas 10 compras a vendedor:'
+        @lstpurchased = FXList.new @fright, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
+        @lblsold = FXLabel.new @fright, 'Últimas 10 ventas a clientes:'
+        @lstsold = FXList.new @fright, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y | LIST_NORMAL
 
-      assign_handlers
-      update_widgets
-    end
-
-    def add_product(product)
-      puts product.errors.objects.to_s unless product.valid?
-      return false unless product.valid?
-      puts "Saving product"
-      product.save
-      @wpf.add_product product
-      update_widgets
-    end
-
-    protected
-
-    def update_widgets
-      super
-      @btnnew.text = "Nuevo producto"
-      
-      return unless @wproduct.editing?
-
-      product = @wproduct.product
-
-      @lstpurchased.clearItems
-      product.purchases.limit(10).order('date desc').each do |purr|
-        @lstpurchased.appendItem purr.to_s
+        assign_handlers
+        update_widgets
       end
-      @lstsold.clearItems
-      product.sells.limit(10).order('date desc').each do |sell|
-        @lstsold.appendItem sell.to_s
+
+      def add_product(product)
+        puts product.errors.objects.to_s unless product.valid?
+        return false unless product.valid?
+        puts "Saving product"
+        product.save
+        @wpf.add_product product
+        update_widgets
       end
-      @btnnew.text = "Guardar"
-    end
 
-    def reset_input
-      @wproduct.reset with_focus: true
-    end
+      protected
 
-    private
+      def update_widgets
+        super
+        @btnnew.text = "Nuevo producto"
+        
+        return unless @wproduct.editing?
 
-    def save_product
-      p = @wproduct.product
-      add_product p
-      reset_input
-    end
-    
-    def assign_handlers
-      # Sequence of ENTERS
-      @wproduct.on :on_data_entered do
-        @btnnew.setFocus
+        product = @wproduct.product
+
+        @lstpurchased.clearItems
+        product.purchases.limit(10).order('date desc').each do |purr|
+          @lstpurchased.appendItem purr.to_s
+        end
+        @lstsold.clearItems
+        product.sells.limit(10).order('date desc').each do |sell|
+          @lstsold.appendItem sell.to_s
+        end
+        @btnnew.text = "Guardar"
       end
-      @btnnew.connect SEL_KEYPRESS do |_sender, _sel, data|
-        save_product if data.text = "\n"
+
+      def reset_input
+        @wproduct.reset with_focus: true
+      end
+
+      private
+
+      def save_product
+        p = @wproduct.product
+        add_product p
+        reset_input
       end
       
-      @wpf.on :on_double_click do |product|
-        wpf_double_clicked product
+      def assign_handlers
+        # Sequence of ENTERS
+        @wproduct.on :on_data_entered do
+          @btnnew.setFocus
+        end
+        @btnnew.connect SEL_KEYPRESS do |_sender, _sel, data|
+          save_product if data.text = "\n"
+        end
+        
+        @wpf.on :on_double_click do |product|
+          wpf_double_clicked product
+        end
+        @btnnew.connect SEL_COMMAND do |_sender, _sel, _data|
+          save_product
+        end
       end
-      @btnnew.connect SEL_COMMAND do |_sender, _sel, _data|
-        save_product
-      end
-    end
 
-    def wpf_double_clicked(product)
-      @wproduct.edit product
-      update_widgets
+      def wpf_double_clicked(product)
+        @wproduct.edit product
+        update_widgets
+      end
     end
   end
 end

@@ -20,17 +20,15 @@
 require 'fox16'
 require_relative 'wappointment_list'
 require_relative 'exporter'
-require_relative 'inventory/wstock'
-require_relative 'inventory/wpurchase'
-require_relative 'inventory/wsell'
-require_relative 'inventory/wsellslist'
-require_relative 'inventory/wpurchaseslist'
+require_relative 'inventory'
 require_relative 'wabout'
 
 # User interface module.
 module GUI
   include Fox
-
+  # Main MDI Window.
+  #
+  # Manage the MDI childs and modal used by the main window.
   class WMain < FXMainWindow
     def initialize(app)
       super app, 'Vet', opts: DECOR_ALL, x: 0, y: 0, width: 800, height: 600
@@ -114,7 +112,7 @@ module GUI
       cmd.connect SEL_COMMAND, method(:on_csv_sells_clicked)
       cmd = FXMenuCommand.new menu, '&Exportar Compras a CSV'
       cmd.connect SEL_COMMAND, method(:on_csv_purchases_clicked)
-      
+
       FXMenuTitle.new @fmenubar, '&Exportar', nil, menu
     end
 
@@ -130,12 +128,14 @@ module GUI
     def create_mdi_childs
       @children[:welcome] = WVetWindow.new @fmdiclient, self, 225, 0, 350, 450
       @children[:appointments] = WAppointment_List.new @fmdiclient
-      @children[:stock] = WStock.new @fmdiclient, 'Stock', nil, nil, 0, 10, 10, 700, 500
-      @children[:purchase] = WPurchase.new @fmdiclient, 'Compra', nil, nil, 0, 10, 10, 700, 500
-      @children[:sell] = WSell.new @fmdiclient, 'Venta', nil, nil, 0, 10, 10, 700, 500
+      @children[:stock] = Inventory::WStock.new @fmdiclient, 'Stock', nil, nil, 0, 10, 10, 700, 500
+      @children[:purchase] = Inventory::WPurchase.new @fmdiclient, 'Compra', nil, nil, 0, 10, 10, 700, 500
+      @children[:sell] = Inventory::WSell.new @fmdiclient, 'Venta', nil, nil, 0, 10, 10, 700, 500
       @children[:about] = WAbout.new @fmdiclient, 10, 0, 500, 500
-      @children[:sellslist] = WSellsList.new @fmdiclient, 'Lista de ventas', nil, nil, 0, 10, 10, 700, 500
-      @children[:purchaseslist] = WPurchasesList.new @fmdiclient, 'Lista de comprados', nil, nil, 0, 10, 10, 700, 500
+      @children[:sellslist] = Inventory::WSellsList.new @fmdiclient, 'Lista de ventas', nil, nil,
+                                                        0, 10, 10, 700, 500
+      @children[:purchaseslist] = Inventory::WPurchasesList.new @fmdiclient, 'Lista de comprados', nil, nil, 0,
+                                                                10, 10, 700, 500
 
       @children.each do |_name, child|
         child.hide
@@ -184,7 +184,6 @@ module GUI
     def on_csv_purchases_clicked(_sender, _sel, _ptr)
       @csv_purchases_exporter.show
     end
-
 
     def on_exit_clicked(_sender, _sel, _ptr)
       getApp.exit

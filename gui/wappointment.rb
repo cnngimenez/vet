@@ -25,7 +25,6 @@ include Models
 
 
 module GUI
-
   ##
   # Widget to display and edit an Appointment instance
   #

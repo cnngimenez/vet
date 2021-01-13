@@ -1,5 +1,5 @@
 # Copyright 2020 Christian Gimenez
-# 
+#
 # wsell.rb
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,27 +15,30 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# frozen_string_literal: true
+
 require 'fox16'
-include Fox
 
 require_relative '../../models'
-include Models
-
 require_relative 'wbill'
 
 module GUI
-  class WSell < WBill
-    def initialize(...)
-      super(...)
+  module Inventory
+    include Fox
+    include Models
 
-      @btnaction.text = "Vender"
+    class WSell < WBill
+      def initialize(...)
+        super(...)
+
+        @btnaction.text = 'Vender'
+      end
+
+      protected
+
+      def create_obj(data)
+        Sell.create data
+      end
     end
-
-    protected
-
-    def create_obj(data)
-      Sell.create data
-    end
-    
-  end # WSell
-end #GUI
+  end
+end

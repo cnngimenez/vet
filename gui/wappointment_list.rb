@@ -1,3 +1,4 @@
+# coding: utf-8
 # Copyright 2020 Christian Gimenez
 #
 # wappointment_list.rb
@@ -65,6 +66,7 @@ module GUI
       @fxbtn.text = 'Guardar Turno'
     end
 
+    # @param date [Time]
     def set_date(date)
       @fxdate.text = 'Turnos para ' + date.strftime('%D')
       @lst = Appointment.filter_by_date date

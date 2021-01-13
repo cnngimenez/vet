@@ -21,6 +21,9 @@ include Fox
 require_relative 'wtime'
 
 module GUI
+  # Time Range Widget
+  #
+  # Allow the user to select a starting and ending time (not date). 
   class WTimeRange < FXHorizontalFrame
     def initialize(...)
       super(...)

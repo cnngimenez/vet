@@ -24,58 +24,61 @@ require_relative 'wproduct_filter'
 
 # User interface module
 module GUI
-  include Fox
-  include Models
+  module Inventory
+    include Fox
+    include Models
 
-  # Widget to display a list of products.
-  class WProductList < FXMDIChild
-    def initialize(...)
-      super(...)
+    # Widget to display a list of products.
+    class WProductList < FXMDIChild
+      def initialize(...)
+        super(...)
 
-      @fmain = FXVerticalFrame.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
-     
-      @ftop = FXHorizontalFrame.new @fmain, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
-      @wpf = WProductFilter.new @ftop, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
-      @fright = FXVerticalFrame.new @ftop
-      @ftips = FXVerticalFrame.new @ftop
+        @fmain = FXVerticalFrame.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
+        
+        @ftop = FXHorizontalFrame.new @fmain, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
+        @wpf = WProductFilter.new @ftop, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y
+        @fright = FXVerticalFrame.new @ftop
+        @ftips = FXVerticalFrame.new @ftop
 
-      connect SEL_CLOSE do |_sender, _sel, _data|
-        self.visible = FALSE
-        1 # This avoids deleting itself when closing
+        connect SEL_CLOSE do |_sender, _sel, _data|
+          self.visible = FALSE
+          1 # This avoids deleting itself when closing
+        end
       end
-    end
 
-    def update_stock
-      @wpf.update_stock
-    end
+      def update_stock
+        @wpf.update_stock
+      end
 
-    def stock=(new_stock)
-      @wpf.stock = new_stock
-      update_widgets
-    end
+      def stock=(new_stock)
+        @wpf.stock = new_stock
+        update_widgets
+      end
 
-    def stock
-      @wpf.stock
-    end
+      def stock
+        @wpf.stock
+      end
 
-    def selected_product
-      @wpf.selected_product
-    end
+      def selected_product
+        @wpf.selected_product
+      end
 
-    def show
-      super
-      update_widgets
-    end
+      def show
+        super
+        update_widgets
+      end
 
-    protected
+      protected
 
-    def reset_input
-      @wpf.reset_input
-    end
+      def reset_input
+        @wpf.reset_input
+      end
 
-    def update_widgets
-      @wpf.update_stock
-      @wpf.update_widgets
+      def update_widgets
+        @wpf.update_stock
+        @wpf.update_widgets
+      end
     end
   end
 end
+  
