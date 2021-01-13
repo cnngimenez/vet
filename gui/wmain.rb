@@ -19,9 +19,7 @@
 
 require 'fox16'
 require_relative 'wappointment_list'
-require_relative 'exporter/csv_product_exporter'
-require_relative 'exporter/csv_sells_exporter'
-require_relative 'exporter/csv_purchases_exporter'
+require_relative 'exporter'
 require_relative 'inventory/wstock'
 require_relative 'inventory/wpurchase'
 require_relative 'inventory/wsell'
