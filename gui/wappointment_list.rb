@@ -71,7 +71,7 @@ module GUI
     # @param date [Time]
     def set_date(date)
       @fxdate.text = 'Turnos para ' + date.strftime('%D')
-      @lst = Appointment.filter_by_date date
+      @lst = Appointment.filter_by_date(date).to_a
       update_widgets
     end
 
