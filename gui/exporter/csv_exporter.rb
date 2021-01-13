@@ -80,6 +80,8 @@ module GUI
 
       filepath += '.csv' unless filepath.end_with? '.csv'
       @txtsave.text = filepath
+
+      update_widgets
     end
 
     def on_btnsave_clicked(...)

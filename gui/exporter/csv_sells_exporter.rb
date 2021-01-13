@@ -57,7 +57,7 @@ module GUI
       def enable_btnsave?
         from = @ffrom_cal.selected
         to = @fto_cal.selected
-        !from.nil? && !to.nil? && warning_text == ''
+        !@txtsave.text.empty? && !from.nil? && !to.nil? && warning_text == ''
       end
 
       # Enable the @btnsave button if the data is ready
@@ -118,7 +118,7 @@ module GUI
         exporter = CSVExporters::SellExporter.new @ffrom_cal.selected, @fto_cal.selected
         return if exporter.too_much_time?
 
-        export.to_file @txtsave.text
+        exporter.to_file @txtsave.text
       end
     end
   end
