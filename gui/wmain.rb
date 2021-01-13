@@ -1,3 +1,4 @@
+# coding: utf-8
 # Copyright 2021 Christian Gimenez
 #
 # wmain.rb
@@ -84,6 +85,8 @@ module GUI
       menu = FXMenuPane.new self
       cmd = FXMenuCommand.new menu, '&Bienvenida'
       cmd.connect SEL_COMMAND, method(:on_bienvenida_clicked)
+      cmd = FXMenuCommand.new menu, '&Información y Soporte'
+      cmd.connect SEL_COMMAND, method(:on_about_clicked)
       cmd = FXMenuCommand.new menu, '&Turnos'
       cmd.connect SEL_COMMAND, method(:on_turnos_clicked)
       cmd = FXMenuCommand.new menu, '&Stock'
@@ -126,7 +129,7 @@ module GUI
     end
 
     def create_mdi_childs
-      @children[:welcome] = WVetWindow.new @fmdiclient, self, 225, 0, 350, 450
+      @children[:welcome] = WVetWindow.new @fmdiclient, self, 225, 0, 350, 550
       @children[:appointments] = WAppointment_List.new @fmdiclient
       @children[:stock] = Inventory::WStock.new @fmdiclient, 'Stock', nil, nil, 0, 10, 10, 700, 500
       @children[:purchase] = Inventory::WPurchase.new @fmdiclient, 'Compra', nil, nil, 0, 10, 10, 700, 500
@@ -147,6 +150,10 @@ module GUI
 
     def on_bienvenida_clicked(_sender, _sel, _ptr)
       show_child :welcome
+    end
+
+    def on_about_clicked(_sender, _sel, _ptr)
+      show_child :about
     end
 
     def on_turnos_clicked(_sender, _sel, _ptr)

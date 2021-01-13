@@ -1,3 +1,4 @@
+# coding: utf-8
 # Copyright 2020 Christian Gimenez
 #
 # wvetwindow.rb
@@ -22,6 +23,11 @@ module GUI
   include Fox
   # A Welcome Window
   class WVetWindow < FXMDIChild
+
+    TIPTEXT = <<~MESSAGE
+    Siempre se recomienda realizar copias de respaldo de su base de datos para evitar pérdida de información. Para saber cómo, haga clic en el botón de Tips:
+    MESSAGE
+    
     def initialize(mdiclient, wmain, x = 0, y = 0, width = 500, height = 500)
       super mdiclient, 'Vet', nil, nil, 0, x, y, width, height
       @wmain = wmain
@@ -35,12 +41,16 @@ module GUI
       # @lblwelcome.justify = JUSTIFY_CENTER_X
       font = FXFont.new getApp, 'courier', 25, FONTWEIGHT_BOLD
       @lblwelcome.font = font
-
+     
       @btnappointments = FXButton.new @f1, 'Turnos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
       @btnstock = FXButton.new @f1, 'Stock de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
       @btnpurchase = FXButton.new @f1, 'Compra de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
       @btnsell = FXButton.new @f1, 'Venta de productos', opts: LAYOUT_FILL_X | BUTTON_NORMAL
-
+      @btnabout = FXButton.new @f1, 'Información y Soporte', opts: LAYOUT_FILL_X | BUTTON_NORMAL
+      txt = FXText.new @f1, nil, 0, TEXT_READONLY | TEXT_WORDWRAP | LAYOUT_FILL_X | LAYOUT_FILL_Y
+      txt.text = TIPTEXT
+      WTipButton.new @f1, mdiclient, 'wabout'
+      
       assign_handlers
     end
 
@@ -58,6 +68,9 @@ module GUI
       end
       @btnsell.connect SEL_COMMAND do |_sender, _sel, _data|
         @wmain.show_child :sell
+      end
+      @btnabout.connect SEL_COMMAND do
+        @wmain.show_child :about
       end
       connect SEL_CLOSE do
         hide
