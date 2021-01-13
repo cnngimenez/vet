@@ -153,5 +153,28 @@ module Models
       s_date = t_date.to_formatted_s :short
       "#{short_name} $#{unitary_cost} x #{amount} = #{total}  #{s_date}"
     end
+
+    def to_csv_array
+      [product.name, unitary_cost, amount, date]
+    end
+
+    class << self
+      # What is the CSV Header used by #to_csv_array ?
+      #
+      # @return [Array] An array of String instances.
+      def csv_header
+        %w[product_name unitary_cost amount date]
+      end
+
+      # Return all sells between a date range.
+      #
+      # @param range [Hash] A hash with :from and :to keys defined. Values are Time objects.
+      #   Ex.: `{ from: from_Time, to: to_Time }`
+      def between_dates(range)
+        from = range[:from].to_i
+        to = range[:to].to_i
+        Sell.where(date: from..to).all
+      end
+    end
   end
 end

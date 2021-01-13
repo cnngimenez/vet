@@ -55,7 +55,7 @@ module Exporters
       #
       # @return [Boolean] true if it is too much, false if it is alright.
       def too_much_time?
-        SellExporter.too_much_time? @data_range[:from], @data_range[:to]
+        SellExporter.too_much_time? @date_range[:from], @date_range[:to]
       end
 
       def to_file(filepath)
@@ -64,7 +64,7 @@ module Exporters
         lst = Sell.between_dates @date_range
 
         CSV.open filepath, 'w' do |csv|
-          csv << Sell.get_csv_header
+          csv << Sell.csv_header
           lst.each do |sell|
             csv << sell.to_csv_array
           end
