@@ -21,6 +21,7 @@ require 'fox16'
 require_relative 'wappointment_list'
 require_relative 'exporter/csv_product_exporter'
 require_relative 'exporter/csv_sells_exporter'
+require_relative 'exporter/csv_purchases_exporter'
 require_relative 'inventory/wstock'
 require_relative 'inventory/wpurchase'
 require_relative 'inventory/wsell'
@@ -43,6 +44,10 @@ module GUI
                                                             opts: DECOR_ALL,
                                                             x: 20, y: 20,
                                                             width: 550, height: 450
+      @csv_purchases_exporter = Exporters::CSVPurchasesExporter.new app, 'Exportar Compras a CSV',
+                                                                    opts: DECOR_ALL,
+                                                                    x: 20, y: 20,
+                                                                    width: 550, height: 450
 
       @fmenubar = FXMenuBar.new self, LAYOUT_SIDE_TOP | LAYOUT_FILL_X
       @fstatusbar = FXStatusBar.new self, LAYOUT_SIDE_BOTTOM | LAYOUT_FILL_X | STATUSBAR_WITH_DRAGCORNER
@@ -103,6 +108,8 @@ module GUI
       cmd.connect SEL_COMMAND, method(:on_csv_products_clicked)
       cmd = FXMenuCommand.new menu, '&Exportar Ventas a CSV'
       cmd.connect SEL_COMMAND, method(:on_csv_sells_clicked)
+      cmd = FXMenuCommand.new menu, '&Exportar Compras a CSV'
+      cmd.connect SEL_COMMAND, method(:on_csv_purchases_clicked)
       
       FXMenuTitle.new @fmenubar, '&Exportar', nil, menu
     end
@@ -159,6 +166,11 @@ module GUI
     def on_csv_sells_clicked(_sender, _sel, _ptr)
       @csv_sells_exporter.show
     end
+
+    def on_csv_purchases_clicked(_sender, _sel, _ptr)
+      @csv_purchases_exporter.show
+    end
+
 
     def on_exit_clicked(_sender, _sel, _ptr)
       getApp.exit

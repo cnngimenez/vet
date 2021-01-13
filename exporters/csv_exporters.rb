@@ -41,8 +41,8 @@ module Exporters
       end
     end
 
-    # Export the Sell instances to a CSV file.
-    class SellExporter
+    # Super class to export Sell and Purchase instances to CSV.
+    class InventoryExporter
       # Initialize the new instance.
       #
       # @param from_date [Time]
@@ -55,18 +55,26 @@ module Exporters
       #
       # @return [Boolean] true if it is too much, false if it is alright.
       def too_much_time?
-        SellExporter.too_much_time? @date_range[:from], @date_range[:to]
+        InventoryExporter.too_much_time? @date_range[:from], @date_range[:to]
       end
 
+      # Create the CSV file with the data
+      #
+      # If the date range is more than the allowed limit, this method returns
+      # false and nothing would be saved.
+      #
+      # @param filepath [String] The file path. Warning: The file will be
+      #   overwritten if it exists.
+      # @return false if the date range is more than the allowed limit.
       def to_file(filepath)
         return false if too_much_time?
 
-        lst = Sell.between_dates @date_range
+        lst = between_dates
 
         CSV.open filepath, 'w' do |csv|
-          csv << Sell.csv_header
-          lst.each do |sell|
-            csv << sell.to_csv_array
+          csv << csv_header
+          lst.each do |object|
+            csv << object.to_csv_array
           end
         end
       end
@@ -79,6 +87,48 @@ module Exporters
           # 5184000 is 60 months in seconds.
           to - from > 5_184_000
         end
+      end
+
+      protected
+
+      # Return instances that are between the @date_range Time range.
+      #
+      # @return [Array] The instances to save to the CSV.
+      def between_dates
+        raise 'Reimplement in subclass.'
+      end
+
+      # Return the CSV header to save to the file.
+      #
+      # @return [Array] An array of Strings.
+      def csv_header
+        raise 'Reimplement in subclass.'
+      end
+    end
+
+    # Export the Sell instances to a CSV file.
+    class SellExporter < InventoryExporter
+      protected
+
+      def between_dates
+        Sell.between_dates @date_range
+      end
+
+      def csv_header
+        Sell.csv_header
+      end
+    end
+
+    # Export Purchase instances to a CSV file
+    class PurchaseExporter < InventoryExporter
+      protected
+
+      def between_dates
+        Purchase.between_dates @date_range
+      end
+
+      def csv_header
+        Purchase.csv_header
       end
     end
   end
