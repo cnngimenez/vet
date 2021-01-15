@@ -21,7 +21,7 @@
 require 'fox16'
 require_relative '../../models'
 require_relative 'wproduct_list'
-require_relative '../wtipbutton'
+require_relative '../common_widgets'
 
 # User interface module
 module GUI
@@ -36,7 +36,7 @@ module GUI
       def initialize(...)
         super(...)
 
-        WTipButton.new @ftips, self.parent, 'wstock'
+        CommonWidgets::WTipButton.new @ftips, self.parent, 'wstock'
         @wproduct = WProduct.new @fright, 'Producto', opts: FRAME_NORMAL | LAYOUT_FILL_X
         @btnnew = FXButton.new @fright, 'Nuevo producto', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
         @lblpurchased = FXLabel.new @fright, 'Últimas 10 compras a vendedor:'

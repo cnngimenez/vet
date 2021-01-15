@@ -20,7 +20,7 @@
 
 require 'fox16'
 
-require_relative '../wtimerange'
+require_relative '../common_widgets'
 require_relative '../../models'
 
 module GUI
@@ -28,6 +28,7 @@ module GUI
   module Appointments
     include Fox
     include Models
+
     ##
     # Widget to display and edit an Appointment instance
     #
@@ -44,7 +45,7 @@ module GUI
         @fxtitle.tipText = 'Título del turno'
 
         @lbltime = FXLabel.new self, 'Hora'
-        @wtime = WTimeRange.new self, opts: LAYOUT_CENTER_X
+        @wtime = CommonWidgets::WTimeRange.new self, opts: LAYOUT_CENTER_X
 
         @lbldesc = FXLabel.new self, 'Descripción'
         @fxdesc = FXText.new self, opts: LAYOUT_FILL_X | LAYOUT_FILL_Y

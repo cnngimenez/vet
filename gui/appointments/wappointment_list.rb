@@ -20,6 +20,7 @@
 
 require 'fox16'
 
+require_relative '../common_widgets'
 require_relative 'wappointment'
 require_relative '../../models'
 
@@ -55,7 +56,7 @@ module GUI
         @wap = WAppointment.new fx1, 'Nuevo Turno', opts: LAYOUT_FILL_X | LAYOUT_FILL_Y | FRAME_NORMAL
         @fxbtn = FXButton.new fx1, 'Nuevo Turno', opts: LAYOUT_CENTER_X | BUTTON_NORMAL
 
-        WTipButton.new fxh1, mdiclient, 'wappointment_list'
+        CommonWidgets::WTipButton.new fxh1, mdiclient, 'wappointment_list'
 
         assign_handlers
         set_date Time.now # Also calls update_widgets

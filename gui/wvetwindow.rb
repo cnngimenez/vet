@@ -18,6 +18,8 @@
 
 require 'fox16'
 
+require_relative 'common_widgets'
+
 # User interface module
 module GUI
   include Fox
@@ -49,7 +51,7 @@ module GUI
       @btnabout = FXButton.new @f1, 'Información y Soporte', opts: LAYOUT_FILL_X | BUTTON_NORMAL
       txt = FXText.new @f1, nil, 0, TEXT_READONLY | TEXT_WORDWRAP | LAYOUT_FILL_X | LAYOUT_FILL_Y
       txt.text = TIPTEXT
-      WTipButton.new @f1, mdiclient, 'wabout'
+      CommonWidgets::WTipButton.new @f1, mdiclient, 'wabout'
       
       assign_handlers
     end
