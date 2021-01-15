@@ -128,6 +128,10 @@ module GUI
       @fbtns[:fsf].connect SEL_COMMAND, method(:open_fsf)
       @fbtns[:license_file].connect SEL_COMMAND, method(:open_license_file)
       @fbtns[:install_dir].connect SEL_COMMAND, method(:open_install_dir)
+      connect SEL_CLOSE do
+        hide
+        1 # Avoid deleting the window when closing.
+      end
     end
   end
 end
