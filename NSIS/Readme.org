@@ -1,0 +1,42 @@
+
+Scripts to create an installer with NSIS.
+
+Nullsoft Scriptable Install System (NSIS) is an open-source system to create Windows Installers (see [[https://nsis.sourceforge.io/Main_Page][its home page]]).
+
+* Required software
+
+- NSIS
+- nsis-mode for developing with Emacs.
+
+* Directory structure.
+
+- cat1.bmp
+- dog1.bmp
+- license.txt
+- dist/
+  - rubyinstaller-2.7.2-1-x64.exe
+  - gems/ 
+- vet-main/  (the source code of this project)
+- installer_modern_ui.nsi
+- update_modern_ui.nsi
+
+Ensure to move or delete the ~vet-main/database.sqlite3~ to avoid packaging your database with the installer. The ~dist/rubyinstaller-*-.exe~ can be downloaded from [[https://rubyinstaller.org/downloads/][rubyinstaller.org download section]]. 
+The ~dist/gems~ are all *.gem packages listed on the Gemfiles and their dependencies. They can be downloaded from https://rubygems.org/.
+
+The ~installer_modern_up.nsi~ script generates the overall installer program: Package the Ruby installers and gems inside it. Also, it sets the registry key with the install path for future updates.
+
+The ~update_modern_up.nsi~ generates the installer program to update the software. It does not add the Ruby installer nor the gems. It uses the registry key to locate the install path if it exists.
+
+* Keep in mind these tips!
+The following tips are important to not repeat the same mistakes:
+
+** Do not use the Desktop or Documents folder as InstallDir value
+The operative system forbids the installer to copy all its files into the personal folders like Desktop and Documents. It is a good practice to use the user's application data directory (~$LOCALAPPDATA~ variable in NSIS).
+
+
+* License
+[[https://www.gnu.org/graphics/gplv3-with-text-136x68.png]]
+
+All the files in this directory (except the images), are under the GNU General Public License version 3. See https://www.gnu.org/licenses/gpl-3.0.html for more information.
+
+The images were converted to BMP format from the ones on the gui/imgs folder. See [[file:gui/imgs/Readme.org][the gui/imgs Readme file]] for their license information.
