@@ -19,10 +19,11 @@
 # frozen_string_literal: true
 
 require 'fox16'
-require_relative 'wappointment_list'
+require_relative 'appointments'
 require_relative 'exporter'
 require_relative 'inventory'
 require_relative 'wabout'
+require_relative 'wvetwindow'
 
 # User interface module.
 module GUI
@@ -130,7 +131,7 @@ module GUI
 
     def create_mdi_childs
       @children[:welcome] = WVetWindow.new @fmdiclient, self, 225, 0, 350, 550
-      @children[:appointments] = WAppointment_List.new @fmdiclient
+      @children[:appointments] = Appointments::WAppointmentList.new @fmdiclient
       @children[:stock] = Inventory::WStock.new @fmdiclient, 'Stock', nil, nil, 0, 10, 10, 700, 500
       @children[:purchase] = Inventory::WPurchase.new @fmdiclient, 'Compra', nil, nil, 0, 10, 10, 700, 500
       @children[:sell] = Inventory::WSell.new @fmdiclient, 'Venta', nil, nil, 0, 10, 10, 700, 500
