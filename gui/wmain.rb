@@ -63,7 +63,9 @@ module GUI
     def show_child(child)
       return unless @children.member? child
 
-      @children[child].show
+      child = @children[child]
+      child.show
+      @fmdiclient.setActiveChild child
     end
 
     private
