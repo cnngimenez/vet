@@ -1,7 +1,6 @@
-# coding: utf-8
 # Copyright 2021 Christian Gimenez
 #
-# wpurchase_edit.rb
+# wsell_edit.rb
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,7 +21,7 @@ require_relative 'winventory_edit'
 
 module GUI
   module Inventory
-    class WPurchaseEdit < WInventoryEdit
+    class WSellEdit < WInventoryEdit
       def initialize(...)
         super(...)
         assign_handlers
@@ -30,10 +29,10 @@ module GUI
         update_widgets
       end
 
-      def purchase=(purr)
-        self.obj = purr
+      def sell=(sell)
+        self.obj = sell
       end
 
-    end    
+    end
   end
 end
