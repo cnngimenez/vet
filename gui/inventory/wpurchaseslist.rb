@@ -19,15 +19,42 @@
 
 require_relative '../../models'
 require_relative 'winventorylist'
+require_relative 'wpurchase_edit'
 
 module GUI
   module Inventory
     # List all Purchase instances (items bought) filtered by a particular date.
     class WPurchasesList < WInventoryList
+
+      def initialize(...)
+        super(...)
+
+        @wpurredit = WPurchaseEdit.new @flistframe, 'Editar Compra', opts: FRAME_NORMAL | LAYOUT_FILL_Y
+
+        assign_handlers
+      end
+      
       protected
       
       def from_date(date)
         Models::Purchase.between_dates  from: date, to: date + 1.day
+      end
+
+      def on_flist_doubleclicked(_sender, _sel, data)
+        obj = @lstobjs[data]
+        @wpurredit.purchase = obj
+      end
+
+      def on_wpurredit_save
+        @wpurredit.enable false
+        update_widgets
+      end
+      
+      def assign_handlers
+        super
+
+        @wpurredit.on :on_save, method(:on_wpurredit_save)
+        @flist.connect SEL_DOUBLECLICKED, method(:on_flist_doubleclicked)        
       end
     end
   end

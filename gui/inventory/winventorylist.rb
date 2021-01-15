@@ -34,7 +34,6 @@ module GUI
         @date = nil
         @lstobjs = []
 
-        assign_handlers
         set_date Time.now # This calls update_widgets too.
       end
 
