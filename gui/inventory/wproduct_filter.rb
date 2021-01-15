@@ -34,7 +34,7 @@ module GUI
       def initialize(...)
         super(...)
 
-        @stock = Product.all.to_a
+        @stock = Models::Product.all.to_a
         @filtered = []
         @actions = { on_select: nil,
                      on_deselect: nil,
@@ -73,7 +73,7 @@ module GUI
       end
 
       def update_stock
-        @stock = Product.all.to_a
+        @stock = Models::Product.all.to_a
         filter ''
         update_widgets
       end

@@ -25,7 +25,6 @@ require_relative 'wbill'
 module GUI
   module Inventory
     include Fox
-    include Models
 
     class WSell < WBill
       def initialize(...)
@@ -37,7 +36,7 @@ module GUI
       protected
 
       def create_obj(data)
-        Sell.create data
+        Models::Sell.create data
       end
     end
   end

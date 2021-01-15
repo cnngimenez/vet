@@ -22,13 +22,12 @@ require_relative 'winventorylist'
 
 module GUI
   module Inventory
-    include Models
     # List all Sell instances (sold items) filtered by a particular date.
     class WSellsList < WInventoryList
       protected
       
       def from_date(date)
-        Sell.between_dates  from: date, to: date + 1.day
+        Models::Sell.between_dates  from: date, to: date + 1.day
       end
     end
   end

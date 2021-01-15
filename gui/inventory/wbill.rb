@@ -35,7 +35,7 @@ module GUI
       def initialize(...)
         super(...)
 
-        @stock = Product.all.to_a
+        @stock = Models::Product.all.to_a
 
         @lblproduct = FXLabel.new @fright, 'Producto:'
         @lblcant = FXLabel.new @fright, 'Cantidad:'

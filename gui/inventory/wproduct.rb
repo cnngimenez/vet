@@ -25,7 +25,6 @@ require_relative '../../models'
 module GUI
   module Inventory
     include Fox
-    include Models
     # Product widget
     #
     # Display and edit a product instance.
@@ -82,7 +81,7 @@ module GUI
       end
 
       def new_product
-        Product.create name: @txtname.text,
+        Models::Product.create name: @txtname.text,
                        code: @txtcode.text,
                        stock: @txtstock.text.to_i,
                        unitary_cost: @txtcost.text.to_f

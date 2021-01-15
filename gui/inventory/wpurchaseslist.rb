@@ -22,13 +22,12 @@ require_relative 'winventorylist'
 
 module GUI
   module Inventory
-    include Models
     # List all Purchase instances (items bought) filtered by a particular date.
     class WPurchasesList < WInventoryList
       protected
       
       def from_date(date)
-        Purchase.between_dates  from: date, to: date + 1.day
+        Models::Purchase.between_dates  from: date, to: date + 1.day
       end
     end
   end

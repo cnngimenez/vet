@@ -26,7 +26,6 @@ require_relative 'wbill'
 module GUI
   module Inventory
     include Fox
-    include Models
 
     # Purchase window
     #
@@ -41,7 +40,7 @@ module GUI
       protected
 
       def create_obj(data)
-        Purchase.create data
+        Models::Purchase.create data
       end
     end
   end
