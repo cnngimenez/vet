@@ -151,6 +151,13 @@ module GUI
       @fmdiclient.setActiveChild @children[:welcome]
     end
 
+    def create
+      super
+      @children.each do |_name, child|
+        child.create
+      end
+    end
+
     def on_bienvenida_clicked(_sender, _sel, _ptr)
       show_child :welcome
     end
