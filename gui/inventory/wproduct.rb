@@ -87,21 +87,33 @@ module GUI
                        unitary_cost: @txtcost.text.to_f
       end
 
+      #  Return the warning text depending on the editing product and the cost inputted.
+      #
+      # @param cost [Float] (Optional). The cost to consider when creating the
+      #   warning text. If absent, the use the current @product cost.
+      # @return '' [String] When the form is not editing a product.
+      # @return [String] The warnings of using that cost.
+      def warning_text(cost=nil)
+        return '' unless editing?
+
+        cost = @product.unitary_cost if cost.nil?
+        last_price = @product.last_purchased_price
+
+        if cost < last_price
+          "Advertencia: El precio de venta es\nmás barato que el precio de compra."
+        elsif cost > last_price + last_price * 0.5
+          "Advertencia: El precio de venta supera\nel 50% de aumento al del precio de compra."
+        else
+          ''
+        end
+      end
+
       private
 
       def on_txtcost_changed(_sender, _sel, data)
         return unless editing?
 
-        cost = data.to_f
-        last_price = @product.last_purchased_price
-
-        @lblwarnings.text = if cost < last_price
-                              "Advertencia: El precio de venta es\nmás barato que el precio de compra."
-                            elsif cost > last_price + last_price * 0.5
-                              "Advertencia: El precio de venta supera\nel 50% de aumento al del precio de compra."
-                            else
-                              ''
-                            end
+        @lblwarnings.text = warning_text data.to_f
       end
 
       def on_txtname_enter(...)
@@ -157,6 +169,7 @@ module GUI
           @txtcost.text = @product.unitary_cost.to_s
           @lblpurchased.text = "(Precio de ultima compra: $#{@product.last_purchased_price})"
         end
+        @lblwarnings.text = warning_text
       end
 
       def update_data
