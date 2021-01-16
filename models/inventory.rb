@@ -128,6 +128,19 @@ module Models
         to = range[:to].to_i
         Purchase.where(date: from..to).all
       end
+
+      def get_dataset(from, to)
+        fromi = from.to_i
+        toi = to.to_i
+        res = Purchase.select('sum(unitary_cost * amount) as totalprice, date("date", "unixepoch") as selldate')
+                .where(date: fromi..toi).group('selldate').all
+        x,y = [], []
+        res.each do |obj|
+          x.push obj.selldate
+          y.push obj.totalprice
+        end
+        [x,y]        
+      end
     end
   end
 
@@ -197,6 +210,19 @@ module Models
         from = range[:from].to_i
         to = range[:to].to_i
         Sell.where(date: from..to).all
+      end
+
+      def get_dataset(from, to)
+        fromi = from.to_i
+        toi = to.to_i
+        res = Sell.select('sum(unitary_cost * amount) as totalprice, date("date", "unixepoch") as selldate')
+                .where(date: fromi..toi).group('selldate').all
+        x,y = [], []
+        res.each do |obj|
+          x.push obj.selldate
+          y.push obj.totalprice
+        end
+        [x,y]        
       end
     end
   end
